@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "211380079737",
+    "firebase_url": "https://cuoiki1-25-default-rtdb.firebaseio.com",
+    "project_id": "cuoiki1-25",
+    "storage_bucket": "cuoiki1-25.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211380079737:android:604ac6c281bb5fe49798a8",
+        "android_client_info": {
+          "package_name": "com.example.shop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6HrPzDeHVBs80jPP6rxT7A-j0CZ8bUsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
