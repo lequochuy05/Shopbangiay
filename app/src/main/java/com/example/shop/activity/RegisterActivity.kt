@@ -4,19 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.example.shop.databinding.ActivityRegisBinding
 import com.example.shop.viewModel.RegisterViewModel
 
-class RegisterActivity : ComponentActivity() {
+class RegisterActivity : BaseActivity() {
     private lateinit var binding: ActivityRegisBinding
     private val registerViewModel: RegisterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityRegisBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -35,7 +33,7 @@ class RegisterActivity : ComponentActivity() {
 
         registerViewModel.registerStatus.observe(this, Observer { success ->
             if (success) {
-                Toast.makeText(this, "Register Success", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Đăng kí thành công", Toast.LENGTH_SHORT).show()
                 finish()
             }
         })
@@ -43,7 +41,6 @@ class RegisterActivity : ComponentActivity() {
         registerViewModel.errorMessage.observe(this, Observer { message ->
             if (message.isNotEmpty()) {
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-                binding.btnSignup.isEnabled = true
             }
         })
 
@@ -53,48 +50,25 @@ class RegisterActivity : ComponentActivity() {
         }
     }
 
-    private fun checkAllFields(
-        firstName: String, lastName: String, phone: String, email: String, password: String, confirmPassword: String
-    ): Boolean {
-        if (firstName.isEmpty()) {
-            binding.txtFirstName.error = "Please enter first name"
-            return false
-        }
-        if (lastName.isEmpty()) {
-            binding.txtLastName.error = "Please enter last name"
-            return false
-        }
-        if (phone.isEmpty()) {
-            binding.txtPhoneNumber.error = "Please enter phone number"
+    private fun checkAllFields(firstName: String, lastName: String, phone: String, email: String, password: String, confirmPassword: String): Boolean {
+        if (firstName.isEmpty() || lastName.isEmpty() || phone.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            Toast.makeText(this, "Tất cả các trường đều phải được điền", Toast.LENGTH_SHORT).show()
             return false
         }
         if (!phone.matches(Regex("^\\d{10,11}$"))) {
-            binding.txtPhoneNumber.error = "Invalid phone number"
-            return false
-        }
-        if (email.isEmpty()) {
-            binding.txtEmail.error = "Please enter email"
+            binding.txtPhoneNumber.error = "Số điện thoại không hợp lệ"
             return false
         }
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.txtEmail.error = "Invalid email format"
+            binding.txtEmail.error = "Định dạng email không hợp lệ"
             return false
         }
-        if (password.isEmpty()) {
-            binding.txtPassword.error = "Please enter password"
-            return false
-        }
-//        if (password.length < 6) {
-//            binding.txtPassword.error = "Password must be at least 6 characters"
-//            return false
-//        }
-        if (confirmPassword.isEmpty()) {
-            binding.txtConfirmPassword.error = "Please enter confirm password"
+        if (password.length < 6) {
+            binding.txtPassword.error = "Mật khẩu phải có ít nhất 6 ký tự"
             return false
         }
         if (password != confirmPassword) {
-            binding.txtPassword.error = "Password does not match"
-            binding.txtConfirmPassword.error = "Password does not match"
+            Toast.makeText(this, "Mật khẩu không khớp", Toast.LENGTH_SHORT).show()
             return false
         }
         return true

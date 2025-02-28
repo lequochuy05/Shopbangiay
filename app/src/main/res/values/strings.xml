@@ -3,9 +3,9 @@
     <string name="introTitle">ONIX SHOP</string>
     <string name="introduce">Nơi mua sắm các đồ dùng cần thiết \n Đầy đủ tiện ích với những mẫu mã khác nhau \nĐặc biệt giá ưu đãi đối với khách hàng mới</string>
     <string name="copyRight">Copyright by QuocHuy</string>
-    <string name="intro_signIn">Already have an account? <font color="#6033ba"> Sign In</font></string>
-    <string name="regis_login">Already have an account? <font color="white"> Sign In</font></string>
-    <string name="login_regis">Do not have an account? <font color="white"> Sign up now</font></string>
+    <string name="intro_signIn">Bạn đã có tài khoản? <font color="#6033ba"> Đăng nhập ngay</font></string>
+    <string name="regis_login">Bạn đã có tài khoản? <font color="white"> Đăng nhập ngay</font></string>
+    <string name="login_regis">Bạn chưa có tài khoản? <font color="white"> Đăng kí tại đây</font></string>
 
     <string name="next">Next</string>
     <string name="previous">Previous</string>

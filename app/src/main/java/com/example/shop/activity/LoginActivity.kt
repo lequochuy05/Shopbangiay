@@ -3,77 +3,88 @@ package com.example.shop.activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import com.example.shop.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.FirebaseDatabase
 
-class LoginActivity : ComponentActivity() {
+class LoginActivity : BaseActivity() {
+
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var auth: FirebaseAuth
-    private lateinit var database: DatabaseReference
+    private val auth = FirebaseAuth.getInstance()
+    private val database = FirebaseDatabase.getInstance().getReference("UserAccount")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance().getReference("UserAccount")
+        binding.tvForgotPassword.setOnClickListener {
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
+        }
 
         binding.txtSignup.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
 
         binding.btnLogin.setOnClickListener {
-            val email = binding.txtEmail.text.toString()
-            val password = binding.txtPassword.text.toString()
+            val email = binding.txtEmail.text.toString().trim()
+            val password = binding.txtPassword.text.toString().trim()
 
             if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Vui lòng nhập email hoặc mật khẩu", Toast.LENGTH_SHORT).show()
             } else {
                 loginUser(email, password)
             }
         }
     }
 
+    /**
+     * Đăng nhập bằng Firebase Authentication và kiểm tra xác thực email
+     */
     private fun loginUser(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    val userId = auth.currentUser?.uid
-                    if (userId != null) {
-                        fetchUserData(userId)
+                    val user = auth.currentUser
+                    if (user != null && user.isEmailVerified) {
+                        fetchUserData(user.uid)
+                    } else {
+                        Toast.makeText(this, "Vui lòng xác thực email trước khi đăng nhập", Toast.LENGTH_LONG).show()
+                        auth.signOut()
                     }
                 } else {
-                    Toast.makeText(this, "Login Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Email hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
-    private fun fetchUserData(userId: String) {
-        database.child(userId).get()
+    /**
+     * Truy xuất thông tin người dùng từ Realtime Database dựa trên key là Firebase UID.
+     */
+    private fun fetchUserData(firebaseUid: String) {
+        database.child(firebaseUid).get()
             .addOnSuccessListener { snapshot ->
                 if (snapshot.exists()) {
-                    val userName = snapshot.child("userFirstName").value.toString()
-                    val userLastName = snapshot.child("userLastName").value.toString()
-                    val userPhone = snapshot.child("userPhoneNumber").value.toString()
+                    val uEmail = snapshot.child("uEmail").value?.toString() ?: ""
+                    val uFName = snapshot.child("uFirstName").value?.toString() ?: ""
+                    val uLName = snapshot.child("uLastName").value?.toString() ?: ""
+                    val uPhone = snapshot.child("uPhoneNumber").value?.toString() ?: ""
 
-                    Toast.makeText(this, "Welcome, $userName!", Toast.LENGTH_SHORT).show()
-
-                    val intent = Intent(this, DashboardActivity::class.java)
-                    intent.putExtra("userId", userId)
-                    intent.putExtra("userName", "$userName $userLastName")
-                    intent.putExtra("userPhone", userPhone)
+                    val intent = Intent(this, DashboardActivity::class.java).apply {
+                        putExtra("uId", firebaseUid)
+                        putExtra("uEmail", uEmail)
+                        putExtra("uFirstName", uFName)
+                        putExtra("userName", "$uFName $uLName")
+                        putExtra("uPhoneNumber", uPhone)
+                    }
                     startActivity(intent)
                     finish()
                 } else {
-                    Toast.makeText(this, "User data not found", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Không tìm thấy thông tin người dùng", Toast.LENGTH_SHORT).show()
                 }
             }
-            .addOnFailureListener {
-                Toast.makeText(this, "Failed to fetch user data", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, exception.message, Toast.LENGTH_SHORT).show()
             }
     }
 }

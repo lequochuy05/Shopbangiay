@@ -47,7 +47,7 @@
                 android:layout_marginEnd="5dp"
                 android:background="@drawable/edittext_bg"
                 android:ems="10"
-                android:hint="First name"
+                android:hint="Tên"
                 android:inputType="text"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
@@ -62,7 +62,7 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/edittext_bg"
                 android:ems="10"
-                android:hint="Last name"
+                android:hint="Họ"
                 android:inputType="text"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
@@ -78,7 +78,7 @@
             android:layout_marginEnd="16dp"
             android:background="@drawable/edittext_bg"
             android:ems="10"
-            android:hint="Phone number"
+            android:hint="Số điện thoại"
             android:inputType="phone"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
@@ -110,7 +110,7 @@
             android:layout_marginEnd="16dp"
             android:background="@drawable/edittext_bg"
             android:ems="10"
-            android:hint="Password"
+            android:hint="Mật khẩu"
             android:inputType="textPassword"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
@@ -125,7 +125,7 @@
             android:layout_marginEnd="16dp"
             android:background="@drawable/edittext_bg"
             android:ems="10"
-            android:hint="Confirm Password"
+            android:hint="Nhập lại mật khẩu"
             android:inputType="textPassword"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
@@ -135,25 +135,25 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSignup"
             style="@android:style/Widget.Button"
-            android:layout_width="177dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
-            android:background="@drawable/button_bg"
+            android:background="@drawable/orange_bg"
             android:gravity="center"
-            android:text="Sign up"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:text="Đăng kí"
+            android:textSize="20sp" />
     </LinearLayout>
     <TextView
         android:id="@+id/tvLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:text="@string/regis_login"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:gravity="center"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="20dp"/>
 
 
     <TextView

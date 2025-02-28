@@ -41,13 +41,13 @@ class CategoryAdapter(val items: MutableList<CategoryModel>)
 
 
         if(selectedPosition == position) {
-            holder.binding.picCat.setBackgroundResource(R.drawable.green_bg)
+            holder.binding.picCat.setBackgroundResource(R.drawable.bluewhite_btn)
             ImageViewCompat.setImageTintList(
                 holder.binding.picCat,
                 ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.context, R.color.white))
             )
         } else {
-            holder.binding.picCat.setBackgroundResource(R.drawable.gray_oval_bg)
+            holder.binding.picCat.setBackgroundResource(R.drawable.white_bg_oval)
             ImageViewCompat.setImageTintList(
                 holder.binding.picCat,
                 ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.context, R.color.black))
