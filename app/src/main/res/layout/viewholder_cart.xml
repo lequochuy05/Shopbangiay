@@ -16,7 +16,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-
         />
 
     <TextView
@@ -30,13 +29,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/tvSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Size"
+        android:textColor="@color/orange"
+        app:layout_constraintStart_toStartOf="@+id/titleTxt"
+        app:layout_constraintTop_toBottomOf="@+id/titleTxt" />
+
+    <TextView
         android:id="@+id/feeEachItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="$0"
-        android:textColor="@color/orange"
-        app:layout_constraintStart_toStartOf="@+id/titleTxt"
-        app:layout_constraintTop_toBottomOf="@+id/titleTxt" />
+        app:layout_constraintStart_toStartOf="@+id/tvSize"
+        app:layout_constraintTop_toBottomOf="@+id/tvSize" />
 
     <TextView
         android:id="@+id/totalEachItem"
@@ -45,7 +52,6 @@
         android:text="$0"
         android:textStyle="bold"
         android:textColor="@color/black"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/feeEachItem" />
 

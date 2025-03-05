@@ -76,8 +76,13 @@ class LoginActivity : BaseActivity() {
                         putExtra("uFirstName", uFName)
                         putExtra("userName", "$uFName $uLName")
                         putExtra("uPhoneNumber", uPhone)
+
                     }
                     startActivity(intent)
+//                    val intent1 = Intent(this@LoginActivity, SettingActivity::class.java).apply{
+//                        putExtra("uFirstName", uFName)
+//                    }
+//                    startActivity(intent1)
                     finish()
                 } else {
                     Toast.makeText(this, "Không tìm thấy thông tin người dùng", Toast.LENGTH_SHORT).show()

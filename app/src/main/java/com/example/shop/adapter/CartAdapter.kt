@@ -11,33 +11,35 @@ import com.example.shop.helper.ChangeNumberItemsListener
 import com.example.shop.model.ItemsModel
 
 class CartAdapter(
-    private val listItemSelected:ArrayList<ItemsModel>,
+    private val listItemSelected: ArrayList<ItemsModel>,
     context: Context,
     var changeNumberItemsListener: ChangeNumberItemsListener? = null
-): RecyclerView.Adapter<CartAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
     class ViewHolder(val binding: ViewholderCartBinding) : RecyclerView.ViewHolder(binding.root)
 
     private val managmentCart = ManagmentCart(context)
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ViewholderCartBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = ViewholderCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       val item = listItemSelected[position]
+        val item = listItemSelected[position]
         holder.binding.titleTxt.text = item.title
-        holder.binding.feeEachItem.text = "$" + item.price.toString()
+        holder.binding.feeEachItem.text = "$${item.price}"
         holder.binding.totalEachItem.text = "$${Math.round(item.numberInCart * item.price)}"
         holder.binding.numberItemTxt.text = item.numberInCart.toString()
+
+        // Hiển thị kích cỡ đã chọn (selectedSize)
+        holder.binding.tvSize.text = if (item.selectedSize.isNotEmpty()) "Size: ${item.selectedSize}" else "Size: Not selected"
 
         Glide.with(holder.itemView.context)
             .load(item.picUrl[0])
             .into(holder.binding.picCart)
 
         holder.binding.plusCartBtn.setOnClickListener {
-            managmentCart.plusItem(listItemSelected, position,object :ChangeNumberItemsListener{
+            managmentCart.plusItem(listItemSelected, position, object : ChangeNumberItemsListener {
                 override fun onChanged() {
                     notifyDataSetChanged()
                     changeNumberItemsListener?.onChanged()
@@ -46,7 +48,7 @@ class CartAdapter(
         }
 
         holder.binding.minusCartBtn.setOnClickListener {
-            managmentCart.minusItem(listItemSelected, position,object :ChangeNumberItemsListener{
+            managmentCart.minusItem(listItemSelected, position, object : ChangeNumberItemsListener {
                 override fun onChanged() {
                     notifyDataSetChanged()
                     changeNumberItemsListener?.onChanged()
@@ -56,6 +58,4 @@ class CartAdapter(
     }
 
     override fun getItemCount(): Int = listItemSelected.size
-
-
 }

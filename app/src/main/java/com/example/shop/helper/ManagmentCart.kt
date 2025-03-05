@@ -13,18 +13,22 @@ class ManagmentCart(val context: Context) {
     private val tinyDB = TinyDB(context)
 
     fun insertItems(item: ItemsModel) {
-        var listFood = getListCart()
-        val existAlready = listFood.any { it.title == item.title }
-        val index = listFood.indexOfFirst { it.title == item.title }
+        val listFood = getListCart()
+        // Kiểm tra xem đã có sản phẩm nào với cùng title và selectedSize chưa
+        val existAlready = listFood.any { it.title == item.title && it.selectedSize == item.selectedSize }
+        val index = listFood.indexOfFirst { it.title == item.title && it.selectedSize == item.selectedSize }
 
         if (existAlready) {
-            listFood[index].numberInCart = item.numberInCart
+            // Nếu sản phẩm đã tồn tại, tăng số lượng
+            listFood[index].numberInCart += item.numberInCart
         } else {
+            // Nếu chưa có, thêm sản phẩm mới
             listFood.add(item)
         }
         tinyDB.putListObject("CartList", listFood)
         Toast.makeText(context, "Added to your Cart", Toast.LENGTH_SHORT).show()
     }
+
 
     fun getListCart(): ArrayList<ItemsModel> {
         return tinyDB.getListObject("CartList") ?: arrayListOf()

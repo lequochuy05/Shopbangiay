@@ -11,5 +11,6 @@ data class ItemsModel(
     var size:ArrayList<String> = ArrayList(),
     var price:Double=0.0,
     var rating:Double=0.0,
-    var numberInCart:Int=0
+    var numberInCart:Int=0,
+    var selectedSize:String=""
 ): Serializable
