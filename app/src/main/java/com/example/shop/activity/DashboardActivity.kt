@@ -26,7 +26,7 @@ class DashboardActivity : BaseActivity() {
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val userFirstName = intent.getStringExtra("uFirstName") ?: "Khách"
+        val userFirstName = intent.getStringExtra("userName") ?: "Khách"
         binding.tvName.text = userFirstName
 
         initCategories()

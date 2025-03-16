@@ -35,7 +35,7 @@
                     android:id="@+id/backBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
+                    android:layout_marginStart="@dimen/margin_start"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/back" />
@@ -44,7 +44,7 @@
                     android:id="@+id/favBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
+                    android:layout_marginEnd="@dimen/margin_end"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/backBtn"
                     app:srcCompat="@drawable/fav_icon" />
@@ -53,7 +53,7 @@
                     android:id="@+id/picList"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="@dimen/margin_bottom"
                     android:background="@drawable/white_bg2"
                     android:clipToPadding="false"
                     android:paddingStart="4dp"
@@ -69,15 +69,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:layout_margin="24dp">
+                android:layout_margin="@dimen/margin">
 
                 <TextView
                     android:id="@+id/titleTxt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="title"
-                    android:textSize="22sp"
+                    android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/black"
                     android:textStyle="bold"/>
 
@@ -88,23 +88,23 @@
                     android:text="$0"
                     android:textColor="@color/black"
                     android:textStyle="bold"
-                    android:textSize="22sp"/>
+                    android:textSize="@dimen/text_size_medium"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:layout_marginHorizontal="24dp">
+                android:layout_marginHorizontal="@dimen/marginHorizontal">
 
                 <TextView
                     android:id="@+id/sizeLayout"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Select size"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_size_small"
                     android:textStyle="bold"/>
 
                 <ImageView
@@ -129,35 +129,34 @@
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:paddingStart="12dp"
-                android:layout_marginTop="8dp"
-               >
+                android:layout_marginTop="@dimen/margin_top"
+                tools:ignore="RtlSymmetry">
             </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:layout_marginTop="20dp"
-                android:textSize="18sp"
+                android:layout_margin="@dimen/margin_top"
+                android:textSize="@dimen/text_size_small"
                 android:text="Qhuy" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:layout_margin="8dp">
+                android:layout_margin="@dimen/margin">
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/addToCartBtn"
                     android:background="@drawable/bluewhite_btn"
                     style="@android:style/Widget.Button"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Thêm vào giỏ hàng"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/text_size_medium"
                     android:layout_margin="8dp"
                     />
 

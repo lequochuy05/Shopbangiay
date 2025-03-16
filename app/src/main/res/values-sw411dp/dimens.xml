@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--default screen-->
+<resources>
+	<dimen name="margin">16dp</dimen>
+	<dimen name="margin_top">12dp</dimen>
+	<dimen name="margin_bottom">12dp</dimen>
+	<dimen name="margin_start">16dp</dimen>
+	<dimen name="margin_end">16dp</dimen>
+<dimen name="marginHorizontal">16dp</dimen>
+	
+	<dimen name="text_size_large">50sp</dimen>
+	<dimen name="text_size_medium">20sp</dimen>
+	<dimen name="text_size_small">16sp</dimen>
+
+	<dimen name="et_mwidth">200dp</dimen>
+	<dimen name="width_logo">24dp</dimen>
+	<dimen name="height_logo">24dp</dimen>
+
+
+
+<!--dashboard-->
+</resources>

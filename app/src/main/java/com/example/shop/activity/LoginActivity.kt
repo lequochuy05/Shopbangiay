@@ -1,31 +1,57 @@
 package com.example.shop.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import com.example.shop.databinding.ActivityLoginBinding
+import com.example.shop.viewModel.LoginViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.database
+import com.example.shop.R
 
+@Suppress("DEPRECATION")
 class LoginActivity : BaseActivity() {
-
     private lateinit var binding: ActivityLoginBinding
-    private val auth = FirebaseAuth.getInstance()
-    private val database = FirebaseDatabase.getInstance().getReference("UserAccount")
+
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var database: DatabaseReference
+
+
+
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        /**
+         * Event clicked forgot password
+         */
         binding.tvForgotPassword.setOnClickListener {
             startActivity(Intent(this, ForgotPasswordActivity::class.java))
         }
-
+        /**
+         * Event clicked Sign up
+         */
         binding.txtSignup.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
-
+        /**
+         * Login with email/password
+         */
         binding.btnLogin.setOnClickListener {
             val email = binding.txtEmail.text.toString().trim()
             val password = binding.txtPassword.text.toString().trim()
@@ -33,63 +59,86 @@ class LoginActivity : BaseActivity() {
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập email hoặc mật khẩu", Toast.LENGTH_SHORT).show()
             } else {
-                loginUser(email, password)
+                loginViewModel.loginUserWithEmail(email, password)
+            }
+        }
+
+        /**
+         * Set up google sign-in
+         */
+        setupGoogleSignIn()
+
+        /**
+         * Remove Google login version to show account selection when logging back in
+         */
+        googleSignInClient.signOut()
+        /**
+         * Event google button
+         */
+        binding.googleBtn.setOnClickListener {
+            val signIn = googleSignInClient.signInIntent
+            launcher.launch(signIn)
+        }
+
+        /**
+         * Event facebook button
+         */
+
+
+
+        observeViewModel()
+    }
+
+    private fun setupGoogleSignIn() {
+        val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
+    }
+
+    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            if (task.isSuccessful) {
+                val account: GoogleSignInAccount = task.result
+                loginViewModel.loginWithGoogle(account.idToken!!)
+            } else {
+                Toast.makeText(this, "Đăng nhập Google thất bại", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    /**
-     * Đăng nhập bằng Firebase Authentication và kiểm tra xác thực email
-     */
-    private fun loginUser(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
-                    if (user != null && user.isEmailVerified) {
-                        fetchUserData(user.uid)
-                    } else {
-                        Toast.makeText(this, "Vui lòng xác thực email trước khi đăng nhập", Toast.LENGTH_LONG).show()
-                        auth.signOut()
-                    }
-                } else {
-                    Toast.makeText(this, "Email hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show()
-                }
-            }
-    }
 
     /**
-     * Truy xuất thông tin người dùng từ Realtime Database dựa trên key là Firebase UID.
+     * function get session data from login update dashboard (name, ...)
      */
-    private fun fetchUserData(firebaseUid: String) {
-        database.child(firebaseUid).get()
-            .addOnSuccessListener { snapshot ->
-                if (snapshot.exists()) {
-                    val uEmail = snapshot.child("uEmail").value?.toString() ?: ""
-                    val uFName = snapshot.child("uFirstName").value?.toString() ?: ""
-                    val uLName = snapshot.child("uLastName").value?.toString() ?: ""
-                    val uPhone = snapshot.child("uPhoneNumber").value?.toString() ?: ""
-
+    private fun observeViewModel() {
+        loginViewModel.loginStatus.observe(this) { success ->
+            if (success) {
+                loginViewModel.userData.value?.let { user ->
                     val intent = Intent(this, DashboardActivity::class.java).apply {
-                        putExtra("uId", firebaseUid)
-                        putExtra("uEmail", uEmail)
-                        putExtra("uFirstName", uFName)
-                        putExtra("userName", "$uFName $uLName")
-                        putExtra("uPhoneNumber", uPhone)
 
+                        putExtra("uId", user.uId)
+                        putExtra("uEmail", user.uEmail)
+                        putExtra("userName", "${user.uFirstName} ${user.uLastName}")
+                        putExtra("uPhoneNumber", user.uPhoneNumber)
                     }
                     startActivity(intent)
-//                    val intent1 = Intent(this@LoginActivity, SettingActivity::class.java).apply{
-//                        putExtra("uFirstName", uFName)
-//                    }
-//                    startActivity(intent1)
                     finish()
-                } else {
-                    Toast.makeText(this, "Không tìm thấy thông tin người dùng", Toast.LENGTH_SHORT).show()
                 }
             }
-            .addOnFailureListener { exception ->
-                Toast.makeText(this, exception.message, Toast.LENGTH_SHORT).show()
+        }
+        loginViewModel.loginError.observe(this) { error ->
+            error?.let { Toast.makeText(this, it, Toast.LENGTH_SHORT).show() }
+        }
+
+        loginViewModel.loginError.observe(this) { error ->
+            error?.let {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
             }
+        }
+
     }
 }

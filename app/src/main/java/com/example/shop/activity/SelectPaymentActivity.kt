@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.shop.databinding.ActivitySelectPaymentBinding
 
-class SelectPaymentActivity : AppCompatActivity() {
+class SelectPaymentActivity : BaseActivity() {
     private lateinit var binding: ActivitySelectPaymentBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

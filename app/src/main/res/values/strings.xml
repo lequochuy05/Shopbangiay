@@ -2,7 +2,7 @@
     <string name="app_name">Shop</string>
     <string name="introTitle">ONIX SHOP</string>
     <string name="introduce">Nơi mua sắm các đồ dùng cần thiết \n Đầy đủ tiện ích với những mẫu mã khác nhau \nĐặc biệt giá ưu đãi đối với khách hàng mới</string>
-    <string name="copyRight">Copyright by QuocHuy</string>
+    <string name="copyRight">Design by QuocHuy</string>
     <string name="intro_signIn">Bạn đã có tài khoản? <font color="#6033ba"> Đăng nhập ngay</font></string>
     <string name="regis_login">Bạn đã có tài khoản? <font color="white"> Đăng nhập ngay</font></string>
     <string name="login_regis">Bạn chưa có tài khoản? <font color="white"> Đăng kí tại đây</font></string>
@@ -46,6 +46,7 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="default_web_client_id">211380079737-qfjdcs0r7j45d6kupsd1odsq2cv24656.apps.googleusercontent.com</string>
 
 
 </resources>

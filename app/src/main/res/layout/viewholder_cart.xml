@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="90dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
+    android:layout_margin="@dimen/margin"
     >
 
     <ImageView
@@ -22,8 +21,9 @@
         android:id="@+id/titleTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/margin_start"
         android:text="title"
+        android:textSize="@dimen/text_size_small"
         android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@+id/picCart"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,6 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Size"
+        android:textSize="@dimen/text_size_small"
         android:textColor="@color/orange"
         app:layout_constraintStart_toStartOf="@+id/titleTxt"
         app:layout_constraintTop_toBottomOf="@+id/titleTxt" />
@@ -42,6 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="$0"
+        android:textSize="@dimen/text_size_small"
         app:layout_constraintStart_toStartOf="@+id/tvSize"
         app:layout_constraintTop_toBottomOf="@+id/tvSize" />
 
@@ -50,6 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="$0"
+        android:textSize="@dimen/text_size_small"
         android:textStyle="bold"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -68,6 +71,7 @@
             android:layout_height="28dp"
             android:gravity="center"
             android:text="+"
+            android:textSize="@dimen/text_size_small"
             android:textStyle="bold"
             android:background="@drawable/grey_circle_bg"
             android:textColor="@color/white"
@@ -82,7 +86,7 @@
             android:text="0"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_small"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/plusCartBtn"
             app:layout_constraintStart_toEndOf="@+id/minusCartBtn"
@@ -93,6 +97,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:text="-"
+            android:textSize="@dimen/text_size_small"
             android:background="@drawable/white_bg_oval"
             android:textColor="@color/orange"
             android:textStyle="bold"

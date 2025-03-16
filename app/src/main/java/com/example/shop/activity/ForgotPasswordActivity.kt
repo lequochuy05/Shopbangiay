@@ -35,7 +35,7 @@ class ForgotPasswordActivity : BaseActivity() {
                     Toast.makeText(this, "Đã gửi email đặt lại mật khẩu đến $email", Toast.LENGTH_SHORT).show()
                     finish()  // Quay lại màn hình trước sau khi gửi email thành công
                 } else {
-                    Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Lỗi: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }

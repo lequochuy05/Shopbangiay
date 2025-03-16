@@ -1,53 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue"
-    android:orientation="vertical">
-
-    <ImageView
-        android:id="@+id/imageViewLogo"
-        android:layout_width="match_parent"
-        android:layout_height="262dp"
-        android:src="@drawable/ic_regis" />
-
-    <TextView
-        android:id="@+id/textTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/freescript"
-        android:lineSpacingExtra="-16dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
-        android:text="Hi... Welcome to Shop "
-        android:textColor="@color/white"
-        android:textSize="60sp" />
-
-
+    android:background="@color/blue">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageViewLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_regis" />
+
+        <TextView
+            android:id="@+id/textTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin"
+            android:fontFamily="@font/freescript"
+            android:layout_gravity="center"
+            android:text="Hi... Welcome to Shop "
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_large" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="16dp"
-            >
+            android:layout_marginBottom="@dimen/margin_bottom">
 
             <EditText
                 android:id="@+id/txtFirstName"
-                android:layout_width="194dp"
+                android:layout_width="@dimen/et_mwidth"
                 android:layout_height="60dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="5dp"
-                android:background="@drawable/edittext_bg"
+                android:layout_marginStart="@dimen/margin_start"
+                android:layout_marginEnd="@dimen/margin_end"
+                android:background="@drawable/login_edittext_bg"
                 android:ems="10"
                 android:hint="Tên"
+                android:textSize="@dimen/text_size_medium"
                 android:inputType="text"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
@@ -56,13 +51,13 @@
 
             <EditText
                 android:id="@+id/txtLastName"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/et_mwidth"
                 android:layout_height="60dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/edittext_bg"
+                android:layout_marginEnd="@dimen/margin_end"
+                android:background="@drawable/login_edittext_bg"
                 android:ems="10"
                 android:hint="Họ"
+                android:textSize="@dimen/text_size_medium"
                 android:inputType="text"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
@@ -74,11 +69,12 @@
             android:id="@+id/txtPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/edittext_bg"
+            android:layout_marginStart="@dimen/margin_start"
+            android:layout_marginEnd="@dimen/margin_start"
+            android:background="@drawable/login_edittext_bg"
             android:ems="10"
             android:hint="Số điện thoại"
+            android:textSize="@dimen/text_size_medium"
             android:inputType="phone"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
@@ -89,13 +85,14 @@
             android:id="@+id/txtEmail"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/edittext_bg"
+            android:layout_marginStart="@dimen/margin_start"
+            android:layout_marginEnd="@dimen/margin_start"
+            android:layout_marginTop="@dimen/margin_top"
+            android:background="@drawable/login_edittext_bg"
             android:ems="10"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:layout_marginTop="16dp"
+            android:textSize="@dimen/text_size_medium"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:textColor="@color/white"
@@ -105,12 +102,13 @@
             android:id="@+id/txtPassword"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/edittext_bg"
+            android:layout_marginStart="@dimen/margin_start"
+            android:layout_marginEnd="@dimen/margin_start"
+            android:layout_marginTop="@dimen/margin_top"
+            android:background="@drawable/login_edittext_bg"
             android:ems="10"
             android:hint="Mật khẩu"
+            android:textSize="@dimen/text_size_medium"
             android:inputType="textPassword"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
@@ -120,13 +118,14 @@
             android:id="@+id/txtConfirmPassword"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/edittext_bg"
+            android:layout_marginStart="@dimen/margin_start"
+            android:layout_marginEnd="@dimen/margin_start"
+            android:layout_marginTop="@dimen/margin_top"
+            android:background="@drawable/login_edittext_bg"
             android:ems="10"
             android:hint="Nhập lại mật khẩu"
             android:inputType="textPassword"
+            android:textSize="@dimen/text_size_medium"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:textColor="@color/white"
@@ -135,36 +134,37 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSignup"
             style="@android:style/Widget.Button"
-            android:layout_width="190dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="30dp"
+            android:layout_margin="@dimen/margin"
+
             android:background="@drawable/orange_bg"
             android:gravity="center"
             android:text="Đăng kí"
-            android:textSize="20sp" />
+            android:textSize="@dimen/text_size_medium" />
+
+        <TextView
+            android:id="@+id/tvLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_top"
+            android:text="@string/regis_login"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_small"
+            android:gravity="center"/>
+
+
+        <TextView
+            android:id="@+id/Copyright"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin"
+            android:text="@string/copyRight"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold" />
     </LinearLayout>
-    <TextView
-        android:id="@+id/tvLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:text="@string/regis_login"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:layout_marginTop="20dp"/>
-
-
-    <TextView
-        android:id="@+id/Copyright"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="@string/copyRight"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-</LinearLayout>
+</ScrollView>

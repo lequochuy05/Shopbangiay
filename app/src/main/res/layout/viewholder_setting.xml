@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,10 +10,11 @@
 
     <ImageView
         android:id="@+id/ivIcon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="@dimen/width_logo"
+        android:layout_height="@dimen/height_logo"
+        android:scaleType="centerCrop"
         android:background="@drawable/white_bg_oval"
-        android:layout_marginEnd="16dp" />
+        android:layout_marginEnd="@dimen/margin_end" />
 
 
     <TextView
@@ -21,14 +23,15 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Title"
-        android:textSize="16sp"
-        android:textColor="@android:color/black" />
+        android:textSize="@dimen/text_size_medium"
+        android:textColor="@color/black" />
 
     <Switch
         android:id="@+id/switchSetting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <ImageView
         android:id="@+id/ivArrow"
