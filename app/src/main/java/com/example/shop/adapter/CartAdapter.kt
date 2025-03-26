@@ -1,9 +1,10 @@
 package com.example.shop.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.example.shop.helper.ManagmentCart
+import com.example.shop.helper.ManagementCart
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.shop.databinding.ViewholderCartBinding
@@ -17,7 +18,7 @@ class CartAdapter(
 ) : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
     class ViewHolder(val binding: ViewholderCartBinding) : RecyclerView.ViewHolder(binding.root)
 
-    private val managmentCart = ManagmentCart(context)
+    private val managementCart = ManagementCart(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ViewholderCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -39,7 +40,8 @@ class CartAdapter(
             .into(holder.binding.picCart)
 
         holder.binding.plusCartBtn.setOnClickListener {
-            managmentCart.plusItem(listItemSelected, position, object : ChangeNumberItemsListener {
+            managementCart.plusItem(listItemSelected, position, object : ChangeNumberItemsListener {
+                @SuppressLint("NotifyDataSetChanged")
                 override fun onChanged() {
                     notifyDataSetChanged()
                     changeNumberItemsListener?.onChanged()
@@ -48,7 +50,8 @@ class CartAdapter(
         }
 
         holder.binding.minusCartBtn.setOnClickListener {
-            managmentCart.minusItem(listItemSelected, position, object : ChangeNumberItemsListener {
+            managementCart.minusItem(listItemSelected, position, object : ChangeNumberItemsListener {
+                @SuppressLint("NotifyDataSetChanged")
                 override fun onChanged() {
                     notifyDataSetChanged()
                     changeNumberItemsListener?.onChanged()

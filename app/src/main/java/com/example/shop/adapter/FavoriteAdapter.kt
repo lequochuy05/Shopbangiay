@@ -1,5 +1,6 @@
 package com.example.shop.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,9 +12,9 @@ import com.example.shop.helper.FavoriteManager
 import com.example.shop.model.ItemsModel
 
 class FavoriteAdapter(
-    private val listItemSelected: ArrayList<ItemsModel>,
-    context: Context,
-    private var changeNumberItemsListener: ChangeNumberItemsListener? = null
+    private var favoriteList: MutableList<ItemsModel>,
+    private val context: Context,
+    private val changeNumberItemsListener: ChangeNumberItemsListener
 ) : RecyclerView.Adapter<FavoriteAdapter.ViewHolder>() {
 
     private val inflater = LayoutInflater.from(context)
@@ -25,28 +26,31 @@ class FavoriteAdapter(
         return ViewHolder(binding)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = listItemSelected[position]
+        val item = favoriteList[position]
         with(holder.binding) {
             titleTxt.text = item.title
-            tvSize.text = if (item.selectedSize.isNotEmpty()) "Size: ${item.selectedSize}" else "Size: Not selected"
+            tvSize.text = "Size: ${item.selectedSize.ifEmpty { "Not selected" }}"
             feeEachItem.text = "$${item.price}"
 
-            // Hiển thị hình ảnh sản phẩm
+            // Load hình ảnh sản phẩm
             Glide.with(holder.itemView.context)
                 .load(item.picUrl.getOrNull(0))
                 .into(picCart)
 
-            // Nút xóa khỏi favorites
+            // Xóa khỏi danh sách yêu thích
             btnRemove.setOnClickListener {
                 FavoriteManager.removeFavorite(item)
-                listItemSelected.removeAt(position)
+                favoriteList.removeAt(position)
                 notifyItemRemoved(position)
-                notifyItemRangeChanged(position, listItemSelected.size)
-                changeNumberItemsListener?.onChanged()
+                notifyItemRangeChanged(position, favoriteList.size)
+
+                // Gọi callback để cập nhật UI nếu danh sách trống
+                changeNumberItemsListener.onChanged()
             }
         }
     }
 
-    override fun getItemCount(): Int = listItemSelected.size
+    override fun getItemCount(): Int = favoriteList.size
 }

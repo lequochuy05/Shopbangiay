@@ -1,88 +1,74 @@
 package com.example.shop.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.shop.R
 import com.example.shop.adapter.SettingAdapter
 import com.example.shop.databinding.ActivitySettingBinding
 import com.example.shop.model.SettingModel
+import com.example.shop.viewModel.SettingViewModel
 
 class SettingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingBinding
     private lateinit var settingAdapter: SettingAdapter
 
+    private lateinit var settings: SettingModel
+
+    private val settingViewModel: SettingViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val userFirstName = intent.getStringExtra("uFirstName") ?: "Khách"
-        binding.tvUsername.text = userFirstName
-
-        val settingList = listOf(
-
-            SettingModel(R.drawable.search_icon, "Theo dõi đơn hàng"),
-            SettingModel(R.drawable.ic_address, "Thanh toán và địa chỉ"),
-            SettingModel(R.drawable.ic_thongbao, "Thông báo", hasSwitch = true),
-            SettingModel(R.drawable.ic_world, "Ngôn ngữ"),
-            SettingModel(R.drawable.ic_logout, "Đăng xuất")
-        )
-
         settingAdapter = SettingAdapter(
-            settingList,
-            onItemClick = { position ->
-                handleItemClick(position, settingList)
-            },
-            onSwitchToggle = { position, isChecked ->
-                handleSwitchToggle(position, isChecked, settingList)
-            }
+            emptyList(),
+            onItemClick = { position -> settingViewModel.onSettingClicked(position) },
+            onSwitchToggle = { position, isChecked -> settingViewModel.onSwitchToggle(position, isChecked) }
         )
 
         binding.rvSettings.apply {
             layoutManager = LinearLayoutManager(this@SettingActivity)
             adapter = settingAdapter
         }
-        binding.tvEditPersonalInfo.setOnClickListener {
-            Toast.makeText(this, "Edit personal info clicked", Toast.LENGTH_SHORT).show()
 
+        binding.tvEditPersonalInfo.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
         }
+
         binding.backBtn.setOnClickListener {
             finish()
         }
+
+
+        observeViewModel()
     }
 
-    private fun handleItemClick(position: Int, settingList: List<SettingModel>) {
-        val item = settingList[position]
-        when (item.title) {
-            "Theo dõi đơn hàng" -> {
-                Toast.makeText(this, "Track Order clicked", Toast.LENGTH_SHORT).show()
-                // ...
-            }
-            "Thanh toán và địa chỉ" -> {
-                Toast.makeText(this, "Billing & Addresses clicked", Toast.LENGTH_SHORT).show()
-                // ...
-            }
-
-            "Ngôn ngữ" -> {
-                Toast.makeText(this, "Language clicked", Toast.LENGTH_SHORT).show()
-                // ...
-            }
-            "Đăng xuất" -> {
-                Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show()
-                // Xử lý logout
-            }
-            else -> {}
+    private fun observeViewModel() {
+        settingViewModel.settings.observe(this) { settings ->
+            settingAdapter.updateSettings(settings)
         }
-    }
 
-    private fun handleSwitchToggle(position: Int, isChecked: Boolean, settingList: List<SettingModel>) {
-        val item = settingList[position]
-        if (item.title == "Thông báo") {
-            Toast.makeText(this, "Notifications switched: $isChecked", Toast.LENGTH_SHORT).show()
-            // Xử lý tắt/bật notifications
+        settingViewModel.logoutEvent.observe(this) { shouldLogout ->
+            if (shouldLogout) {
+                Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+
+        settingViewModel.notificationState.observe(this) { isEnabled ->
+            Toast.makeText(this, "Thông báo: ${if (isEnabled) "Bật" else "Tắt"}", Toast.LENGTH_SHORT).show()
+        }
+
+        settingViewModel.navigateToOrderTracking.observe(this) { shouldNavigate ->
+            if (shouldNavigate) {
+                val intent = Intent(this, OrderTrackingActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 }

@@ -15,13 +15,11 @@ class IntroActivity : BaseActivity() {
         setContentView(binding.root)
 
         binding.introButton.setOnClickListener {
-            val intent = Intent(this, DashboardActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, DashboardActivity::class.java))
         }
 
         binding.introSignIn.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, LoginActivity::class.java))
         }
 
     }

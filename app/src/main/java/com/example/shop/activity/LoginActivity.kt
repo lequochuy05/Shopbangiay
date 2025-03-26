@@ -12,13 +12,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.auth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.database
 import com.example.shop.R
 
 @Suppress("DEPRECATION")
@@ -26,9 +19,6 @@ class LoginActivity : BaseActivity() {
     private lateinit var binding: ActivityLoginBinding
 
     private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var database: DatabaseReference
-
-
 
     private val loginViewModel: LoginViewModel by viewModels()
 
@@ -85,9 +75,9 @@ class LoginActivity : BaseActivity() {
          */
 
 
-
         observeViewModel()
     }
+
 
     private fun setupGoogleSignIn() {
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -141,4 +131,7 @@ class LoginActivity : BaseActivity() {
         }
 
     }
+
 }
+
+

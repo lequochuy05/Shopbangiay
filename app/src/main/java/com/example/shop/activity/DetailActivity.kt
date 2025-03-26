@@ -10,14 +10,14 @@ import com.example.shop.adapter.PicListAdapter
 import com.example.shop.adapter.SizeListAdapter
 import com.example.shop.databinding.ActivityDetailBinding
 import com.example.shop.helper.FavoriteManager
-import com.example.shop.helper.ManagmentCart
+import com.example.shop.helper.ManagementCart
 import com.example.shop.model.ItemsModel
 
 class DetailActivity : BaseActivity() {
     private lateinit var binding: ActivityDetailBinding
     private lateinit var item: ItemsModel
     private var numberOrder = 1
-    private lateinit var managementCart: ManagmentCart
+    private lateinit var managementCart: ManagementCart
     private var selectedSize: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +25,7 @@ class DetailActivity : BaseActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        managementCart = ManagmentCart(this)
+        managementCart = ManagementCart(this)
 
         getBundle()
         initList()

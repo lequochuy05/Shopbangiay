@@ -2,13 +2,10 @@ package com.example.shop.helper
 
 import android.content.Context
 import android.widget.Toast
-import com.example.shop.helper.ChangeNumberItemsListener
-import com.example.shop.helper.ManagmentCart
-import com.example.shop.helper.TinyDB
 import com.example.shop.model.ItemsModel
 
 
-class ManagmentCart(val context: Context) {
+class ManagementCart(val context: Context) {
 
     private val tinyDB = TinyDB(context)
 

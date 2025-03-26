@@ -1,15 +1,14 @@
 package com.example.shop.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.shop.R
 import com.example.shop.databinding.ViewholderSettingBinding
 import com.example.shop.model.SettingModel
-
 class SettingAdapter(
-    private val settingList: List<SettingModel>,
+    private var settingList: List<SettingModel>,
     private val onItemClick: (position: Int) -> Unit,
     private val onSwitchToggle: (position: Int, isChecked: Boolean) -> Unit
 ) : RecyclerView.Adapter<SettingAdapter.ViewHolder>() {
@@ -27,12 +26,13 @@ class SettingAdapter(
             ivIcon.setImageResource(item.icon)
             tvTitle.text = item.title
 
-            // Nếu hasSwitch = true, hiển thị Switch, ẩn mũi tên
             if (item.hasSwitch) {
                 switchSetting.visibility = View.VISIBLE
                 ivArrow.visibility = View.GONE
 
-                // Bắt sự kiện thay đổi Switch
+                switchSetting.setOnCheckedChangeListener(null)
+                switchSetting.isChecked = item.isChecked
+
                 switchSetting.setOnCheckedChangeListener { _, isChecked ->
                     onSwitchToggle(position, isChecked)
                 }
@@ -41,13 +41,20 @@ class SettingAdapter(
                 switchSetting.visibility = View.GONE
                 ivArrow.visibility = View.VISIBLE
 
-                // Bắt sự kiện click item
                 root.setOnClickListener {
                     onItemClick(position)
                 }
             }
         }
+
     }
 
     override fun getItemCount(): Int = settingList.size
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateSettings(newList: List<SettingModel>) {
+        settingList = newList
+        notifyDataSetChanged() // Cập nhật RecyclerView
+    }
 }
+

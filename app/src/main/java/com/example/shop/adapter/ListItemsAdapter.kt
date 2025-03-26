@@ -1,5 +1,6 @@
 package com.example.shop.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -102,6 +103,12 @@ private var context:Context? = null
             item.logo
         )
 
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateList(newList: List<ItemsModel>) {
+        items.clear()
+        items.addAll(newList)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = items.size

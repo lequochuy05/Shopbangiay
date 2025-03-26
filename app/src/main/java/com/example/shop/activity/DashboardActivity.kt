@@ -3,17 +3,12 @@ package com.example.shop.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shop.adapter.BestSellerAdapter
 import com.example.shop.adapter.CategoryAdapter
 import com.example.shop.databinding.ActivityDashboardBinding
 import com.example.shop.viewModel.DashboardViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 
 class DashboardActivity : BaseActivity() {
 
@@ -35,17 +30,12 @@ class DashboardActivity : BaseActivity() {
     }
 
     private fun bottomNavigation() {
-        binding.cartBtn.setOnClickListener {
-            startActivity(Intent(this, CartActivity::class.java))
 
-        }
-        binding.favBtn.setOnClickListener{
-            startActivity(Intent(this, FavoriteActivity::class.java))
-        }
+        binding.exploreBtn.setOnClickListener{ startActivity(Intent(this, ExploreActivity::class.java)) }
+        binding.cartBtn.setOnClickListener { startActivity(Intent(this, CartActivity::class.java)) }
+        binding.favBtn.setOnClickListener{ startActivity(Intent(this, FavoriteActivity::class.java)) }
+        binding.settingBtn.setOnClickListener{ startActivity(Intent(this, SettingActivity::class.java)) }
 
-        binding.settingBtn.setOnClickListener{
-            startActivity(Intent(this, SettingActivity::class.java))
-        }
     }
 
     private fun initCategories() {
@@ -67,4 +57,5 @@ class DashboardActivity : BaseActivity() {
             binding.progressBarBestSeller.visibility = View.GONE
         })
     }
+
 }

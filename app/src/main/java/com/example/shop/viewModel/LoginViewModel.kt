@@ -61,7 +61,9 @@
                                     uEmail = email,
                                     uFirstName = user.displayName?.split(" ")?.firstOrNull() ?: "",
                                     uLastName = user.displayName?.split(" ")?.lastOrNull() ?: "",
-                                    uPhoneNumber = user.phoneNumber ?: ""
+                                    uPhoneNumber = user.phoneNumber ?: "",
+                                    uAddress = "",
+                                    dob = ""
                                 )
                                 loginRepository.registerNewUser(newUser)
                                 _userData.value = newUser

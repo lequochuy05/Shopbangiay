@@ -11,6 +11,7 @@ import com.example.shop.helper.FavoriteManager
 
 class FavoriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFavoriteBinding
+    private lateinit var adapter: FavoriteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,30 +19,27 @@ class FavoriteActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.backBtn.setOnClickListener { finish() }
-        initFavoriteList()
+
+        setupRecyclerView()
+        updateFavVisibility()
     }
 
-    private fun initFavoriteList() {
-        val favoriteList = FavoriteManager.favoriteList
-        if (favoriteList.isEmpty()) {
-            binding.tvEmptyCart.visibility = View.VISIBLE
-            binding.scrollView3.visibility = View.GONE
-        } else {
-            binding.tvEmptyCart.visibility = View.GONE
-            binding.scrollView3.visibility = View.VISIBLE
+    private fun setupRecyclerView() {
+        val favoriteList = FavoriteManager.getFavorites().toMutableList()
+        adapter = FavoriteAdapter(favoriteList, this, object : ChangeNumberItemsListener {
+            override fun onChanged() {
+                updateFavVisibility()
+            }
+        })
 
-            binding.favoriteRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            binding.favoriteRecyclerView.adapter = FavoriteAdapter(favoriteList, this, object : ChangeNumberItemsListener {
-                override fun onChanged() {
-                    updateFavVisibility()
-                }
-            })
+        binding.favoriteRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this@FavoriteActivity)
+            adapter = this@FavoriteActivity.adapter
         }
     }
 
     private fun updateFavVisibility() {
-        val favoriteList = FavoriteManager.favoriteList
-        if (favoriteList.isEmpty()) {
+        if (FavoriteManager.getFavorites().isEmpty()) {
             binding.tvEmptyCart.visibility = View.VISIBLE
             binding.scrollView3.visibility = View.GONE
         } else {

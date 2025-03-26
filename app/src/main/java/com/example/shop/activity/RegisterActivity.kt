@@ -27,7 +27,7 @@ class RegisterActivity : BaseActivity() {
             val confirmPassword = binding.txtConfirmPassword.text.toString()
 
             if (checkAllFields(firstName, lastName, phone, email, password, confirmPassword)) {
-                registerViewModel.registerUser(firstName, lastName, phone, email, password)
+                registerViewModel.registerUser(firstName, lastName, phone, email, password, null, null)
             }
         }
 

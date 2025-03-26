@@ -7,11 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shop.adapter.CartAdapter
 import com.example.shop.helper.ChangeNumberItemsListener
 import com.example.shop.databinding.ActivityCartBinding
-import com.example.shop.helper.ManagmentCart
+import com.example.shop.helper.ManagementCart
+import kotlin.math.roundToInt
 
 class CartActivity : BaseActivity() {
     private lateinit var binding: ActivityCartBinding
-    private lateinit var managmentCart: ManagmentCart
+    private lateinit var managementCart: ManagementCart
     private var tax: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,11 +20,12 @@ class CartActivity : BaseActivity() {
         binding = ActivityCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        managmentCart = ManagmentCart(this)
+        managementCart = ManagementCart(this)
 
         binding.paymentBtn.setOnClickListener{
             startActivity(Intent(this, SelectPaymentActivity::class.java))
         }
+
 
         setVariables()
         initCartList()
@@ -31,7 +33,7 @@ class CartActivity : BaseActivity() {
     }
 
     private fun initCartList() {
-        val listCart = managmentCart.getListCart()
+        val listCart = managementCart.getListCart()
         if (listCart.isEmpty()) {
             binding.tvEmptyCart.visibility = View.VISIBLE
             binding.cartView.visibility = View.GONE
@@ -53,7 +55,7 @@ class CartActivity : BaseActivity() {
     }
 
     private fun updateCartVisibility() {
-        val listCart = managmentCart.getListCart()
+        val listCart = managementCart.getListCart()
         if (listCart.isEmpty()) {
             binding.tvEmptyCart.visibility = View.VISIBLE
             binding.cartView.visibility = View.GONE
@@ -69,9 +71,9 @@ class CartActivity : BaseActivity() {
     private fun calculateCart() {
         val percentTax = 0.02
         val delivery = 10
-        tax = Math.round(managmentCart.getTotalFee() * percentTax).toDouble()
-        val total = Math.round(managmentCart.getTotalFee() + tax + delivery).toInt()
-        val itemTotal = Math.round(managmentCart.getTotalFee()).toInt()
+        tax = (managementCart.getTotalFee() * percentTax).roundToInt().toDouble()
+        val total = (managementCart.getTotalFee() + tax + delivery).roundToInt().toInt()
+        val itemTotal = managementCart.getTotalFee().roundToInt().toInt()
 
         with(binding) {
             totalFeeTxt.text = "$$itemTotal"

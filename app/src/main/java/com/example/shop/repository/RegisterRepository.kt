@@ -8,7 +8,7 @@ class RegisterRepository {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val database: DatabaseReference = FirebaseDatabase.getInstance().getReference("UserAccount")
 
-    fun registerUser(firstName: String, lastName: String, phone: String, email: String, password: String, callback: (Boolean, String) -> Unit) {
+    fun registerUser(firstName: String, lastName: String, phone: String, email: String, password: String,address:String?,dob:String?, callback: (Boolean, String) -> Unit) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 auth.currentUser?.sendEmailVerification()?.addOnSuccessListener {
@@ -19,7 +19,9 @@ class RegisterRepository {
                             "uFirstName" to firstName,
                             "uLastName" to lastName,
                             "uPhoneNumber" to phone,
-                            "uEmail" to email
+                            "uEmail" to email,
+                            "uAddress" to (address ?: ""),
+                            "dob" to (dob ?: "")
                         )
                         database.child(it).setValue(userData)
                     }

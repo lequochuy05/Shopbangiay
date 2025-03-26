@@ -17,7 +17,7 @@ class ForgotPasswordActivity : BaseActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        binding.btnResetPassword.setOnClickListener {
+        binding.resetPasswordBtn.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
             if (email.isEmpty()) {
                 binding.etEmail.error = "Email không được để trống"
@@ -26,6 +26,10 @@ class ForgotPasswordActivity : BaseActivity() {
                 resetPassword(email)
             }
         }
+
+        binding.cancelBtn.setOnClickListener{
+            finish()
+        }
     }
 
     private fun resetPassword(email: String) {
@@ -33,7 +37,7 @@ class ForgotPasswordActivity : BaseActivity() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this, "Đã gửi email đặt lại mật khẩu đến $email", Toast.LENGTH_SHORT).show()
-                    finish()  // Quay lại màn hình trước sau khi gửi email thành công
+                    finish()
                 } else {
                     Toast.makeText(this, "Lỗi: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
