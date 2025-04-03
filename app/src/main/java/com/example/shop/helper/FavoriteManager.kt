@@ -24,7 +24,4 @@ object FavoriteManager {
         favoriteList.removeAll { it.title == item.title && it.selectedSize == item.selectedSize }
     }
 
-    fun clearFavorites() {
-        favoriteList.clear()
-    }
 }

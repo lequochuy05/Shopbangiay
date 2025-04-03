@@ -25,7 +25,7 @@ class BestSellerAdapter(val items: MutableList<ItemsModel>)
 
     override fun onBindViewHolder(holder: BestSellerAdapter.Viewholder, position: Int) {
         holder.binding.titleTxt.text = items[position].title
-        holder.binding.priceTxt.text = items[position].price.toString() + " USD"
+        holder.binding.priceTxt.text = items[position].price.toString() + " VND"
         holder.binding.ratingBar.rating = items[position].rating.toFloat()
 
         Glide.with(holder.itemView.context)

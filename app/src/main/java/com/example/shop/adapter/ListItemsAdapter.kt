@@ -97,7 +97,7 @@ private var context:Context? = null
         }
         bindCommonData(
             item.title,
-            item.price.toString() + " USD",
+            item.price.toString() + " VND",
             item.rating.toFloat(),
             item.picUrl[0],
             item.logo

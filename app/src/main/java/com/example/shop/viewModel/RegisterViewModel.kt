@@ -14,8 +14,8 @@ class RegisterViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> = _errorMessage
 
-    fun registerUser(firstName: String, lastName: String, phone: String, email: String, password: String, address: String?, dob: String?) {
-        repository.registerUser(firstName, lastName, phone, email, password, address, dob) { success, message ->
+    fun registerUser(firstName: String, lastName: String, phone: String, email: String, password: String, address: List<String>?, dob: String?, img:String?) {
+        repository.registerUser(firstName, lastName, phone, email, password, address, dob, img) { success, message ->
             _registerStatus.value = success
             _errorMessage.value = message
         }

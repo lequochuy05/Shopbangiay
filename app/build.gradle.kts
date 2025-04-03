@@ -71,6 +71,15 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager:0.36.0")
     implementation ("com.google.android.material:material:1.10.0")
 
+    implementation("com.squareup.okhttp3:okhttp:4.6.0")
+    implementation("commons-codec:commons-codec:1.14")
+
+    implementation(fileTree(mapOf(
+        "dir" to "D:/ZaloPayLib",
+        "include" to listOf("*.aar", "*.jar"),
+        "exclude" to listOf("")
+    )))
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

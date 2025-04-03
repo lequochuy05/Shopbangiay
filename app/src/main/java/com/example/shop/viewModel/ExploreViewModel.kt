@@ -27,9 +27,9 @@ class ExploreViewModel : ViewModel() {
                     item.description.lowercase().contains(searchText)
             val matchesSize = selectedSize == "(Size) Tất cả" || item.size.contains(selectedSize)
             val matchesPrice = when (selectedPrice) {
-                "Dưới 50$" -> item.price < 50
-                "50$ - 100$" -> item.price in 50.0..100.0
-                "Trên 100$" -> item.price > 100
+                "Dưới 500.000" -> item.price < 500000
+                "500.000 - 2.000.000" -> item.price in 500000.0..2000000.0
+                "Trên 2.000.000" -> item.price > 2000000
                 else -> true
             }
             matchesSearch && matchesSize && matchesPrice

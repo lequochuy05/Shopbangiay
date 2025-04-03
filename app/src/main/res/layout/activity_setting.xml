@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    android:layout_width="match_parent"
+<ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.SettingActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -47,36 +48,36 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/ivUserAvatar"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-               android:layout_marginStart="2dp"
-                android:background="@drawable/white_bg_oval"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="16dp"
                 android:src="@drawable/ic_account"
-              />
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/RoundedImage"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginStart="@dimen/margin_start">
+                android:layout_marginStart="16dp">
 
                 <TextView
                     android:id="@+id/tvUsername"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tên"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textStyle="bold" />
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/tvEditPersonalInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Thay đổi thông tin cá nhân"
-                    android:textSize="@dimen/text_size_small"
-                    android:textColor="@android:color/holo_blue_dark" />
+                    android:textSize="14sp"
+                    android:textColor="@android:color/holo_blue_dark"/>
             </LinearLayout>
         </LinearLayout>
 

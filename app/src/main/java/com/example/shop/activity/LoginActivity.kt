@@ -14,12 +14,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.example.shop.R
 
-@Suppress("DEPRECATION")
 class LoginActivity : BaseActivity() {
     private lateinit var binding: ActivityLoginBinding
-
     private lateinit var googleSignInClient: GoogleSignInClient
-
     private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,64 +24,39 @@ class LoginActivity : BaseActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /**
-         * Event clicked forgot password
-         */
+        setupUI()
+        setupGoogleSignIn()
+        googleSignInClient.signOut()
+        observeViewModel()
+    }
+
+    private fun setupUI() {
         binding.tvForgotPassword.setOnClickListener {
             startActivity(Intent(this, ForgotPasswordActivity::class.java))
         }
-        /**
-         * Event clicked Sign up
-         */
         binding.txtSignup.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
-        /**
-         * Login with email/password
-         */
         binding.btnLogin.setOnClickListener {
             val email = binding.txtEmail.text.toString().trim()
             val password = binding.txtPassword.text.toString().trim()
-
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập email hoặc mật khẩu", Toast.LENGTH_SHORT).show()
             } else {
                 loginViewModel.loginUserWithEmail(email, password)
             }
         }
-
-        /**
-         * Set up google sign-in
-         */
-        setupGoogleSignIn()
-
-        /**
-         * Remove Google login version to show account selection when logging back in
-         */
-        googleSignInClient.signOut()
-        /**
-         * Event google button
-         */
         binding.googleBtn.setOnClickListener {
-            val signIn = googleSignInClient.signInIntent
-            launcher.launch(signIn)
+            val signInIntent = googleSignInClient.signInIntent
+            launcher.launch(signInIntent)
         }
-
-        /**
-         * Event facebook button
-         */
-
-
-        observeViewModel()
     }
-
 
     private fun setupGoogleSignIn() {
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
-
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
     }
 
@@ -101,37 +73,27 @@ class LoginActivity : BaseActivity() {
     }
 
 
-    /**
-     * function get session data from login update dashboard (name, ...)
-     */
     private fun observeViewModel() {
         loginViewModel.loginStatus.observe(this) { success ->
             if (success) {
                 loginViewModel.userData.value?.let { user ->
-                    val intent = Intent(this, DashboardActivity::class.java).apply {
-
-                        putExtra("uId", user.uId)
-                        putExtra("uEmail", user.uEmail)
-                        putExtra("userName", "${user.uFirstName} ${user.uLastName}")
-                        putExtra("uPhoneNumber", user.uPhoneNumber)
-                    }
-                    startActivity(intent)
+                    saveUserData(user.id, user.email, "${user.firstName} ${user.lastName}")
+                    startActivity(Intent(this, DashboardActivity::class.java))
                     finish()
                 }
             }
         }
+
         loginViewModel.loginError.observe(this) { error ->
             error?.let { Toast.makeText(this, it, Toast.LENGTH_SHORT).show() }
         }
-
-        loginViewModel.loginError.observe(this) { error ->
-            error?.let {
-                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-            }
-        }
-
     }
-
+    private fun saveUserData(id: String, email: String, name: String) {
+        val sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("uId", id)
+        editor.putString("uEmail", email)
+        editor.putString("userName", name)
+        editor.apply()
+    }
 }
-
-

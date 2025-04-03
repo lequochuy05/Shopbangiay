@@ -16,9 +16,11 @@ class CartAdapter(
     context: Context,
     var changeNumberItemsListener: ChangeNumberItemsListener? = null
 ) : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
-    class ViewHolder(val binding: ViewholderCartBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ViewholderCartBinding) : RecyclerView.ViewHolder(binding.root)
 
-    private val managementCart = ManagementCart(context)
+    private val sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE)
+    private val uId = sharedPreferences.getString("uId", "Unknown").toString()
+    private val managementCart = ManagementCart(context, uId) // Truyền userId vào
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ViewholderCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -28,8 +30,8 @@ class CartAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listItemSelected[position]
         holder.binding.titleTxt.text = item.title
-        holder.binding.feeEachItem.text = "$${item.price}"
-        holder.binding.totalEachItem.text = "$${Math.round(item.numberInCart * item.price)}"
+        holder.binding.feeEachItem.text = "${item.price}  VND"
+        holder.binding.totalEachItem.text = "${Math.round(item.numberInCart * item.price)} VND"
         holder.binding.numberItemTxt.text = item.numberInCart.toString()
 
         // Hiển thị kích cỡ đã chọn (selectedSize)

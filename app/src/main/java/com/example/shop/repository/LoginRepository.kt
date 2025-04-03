@@ -16,10 +16,7 @@ class LoginRepository {
      * Login with Email / Password
      */
     fun loginWithEmail(email: String, password: String, callback: (Task<AuthResult>) -> Unit) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                callback(task)
-            }
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task -> callback(task) }
     }
 
     /**
@@ -27,14 +24,23 @@ class LoginRepository {
      */
     fun getUserData(firebaseUid: String, callback: (UserModel?) -> Unit) {
         database.child(firebaseUid).get()
+
             .addOnSuccessListener { snapshot ->
                 if (snapshot.exists()) {
+                    val addressList = mutableListOf<String>()
+                    snapshot.child("address").children.forEach {
+                        val addr = it.getValue(String::class.java)
+                        if (!addr.isNullOrEmpty()) addressList.add(addr)
+                    }
                     val user = UserModel(
-                        uId = firebaseUid,
-                        uEmail = snapshot.child("uEmail").value?.toString() ?: "",
-                        uFirstName = snapshot.child("uFirstName").value?.toString() ?: "",
-                        uLastName = snapshot.child("uLastName").value?.toString() ?: "",
-                        uPhoneNumber = snapshot.child("uPhoneNumber").value?.toString() ?: ""
+                        id = firebaseUid,
+                        email = snapshot.child("email").value?.takeIf { it is String }?.toString() ?: "",
+                        firstName = snapshot.child("firstName").value?.toString() ?: "",
+                        lastName = snapshot.child("lastName").value?.toString() ?: "",
+                        phoneNumber = snapshot.child("phoneNumber").value?.toString() ?: "",
+                        address = addressList,
+                        dob = snapshot.child("dob").value?.toString() ?: "",
+                        img = snapshot.child("img").value?.toString()?: "",
                     )
                     callback(user)
                 } else {
@@ -46,14 +52,16 @@ class LoginRepository {
             }
     }
 
+
     /**
      * Check email exists in database
      */
     fun checkIfEmailExists(email: String, callback: (UserModel?) -> Unit) {
         database.get().addOnSuccessListener { snapshot ->
             snapshot.children.forEach { userSnapshot ->
-                val user = userSnapshot.getValue(UserModel::class.java)
-                if (user?.uEmail == email) {
+                val emailValue = userSnapshot.child("email").value
+                if (emailValue is String && emailValue == email) {  // Kiểm tra nếu là String
+                    val user = userSnapshot.getValue(UserModel::class.java)
                     callback(user)
                     return@addOnSuccessListener
                 }
@@ -75,7 +83,8 @@ class LoginRepository {
      * Register new account
      */
     fun registerNewUser(user: UserModel) {
-        database.child(user.uId).setValue(user)
+        database.child(user.id).setValue(user)
+
     }
 
     fun getCurrentUser() = auth.currentUser

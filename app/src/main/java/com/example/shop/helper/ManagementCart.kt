@@ -5,30 +5,34 @@ import android.widget.Toast
 import com.example.shop.model.ItemsModel
 
 
-class ManagementCart(val context: Context) {
+class ManagementCart(val context: Context, val userId: String) {
 
     private val tinyDB = TinyDB(context)
+    // Định dạng khóa lưu giỏ hàng theo userId
+    private fun getCartKey(): String {
+        return "CartList_$userId"
+    }
 
     fun insertItems(item: ItemsModel) {
         val listFood = getListCart()
-        // Kiểm tra xem đã có sản phẩm nào với cùng title và selectedSize chưa
         val existAlready = listFood.any { it.title == item.title && it.selectedSize == item.selectedSize }
         val index = listFood.indexOfFirst { it.title == item.title && it.selectedSize == item.selectedSize }
 
         if (existAlready) {
-            // Nếu sản phẩm đã tồn tại, tăng số lượng
             listFood[index].numberInCart += item.numberInCart
         } else {
-            // Nếu chưa có, thêm sản phẩm mới
             listFood.add(item)
         }
-        tinyDB.putListObject("CartList", listFood)
-        Toast.makeText(context, "Added to your Cart", Toast.LENGTH_SHORT).show()
+        tinyDB.putListObject(getCartKey(), listFood)
+        Toast.makeText(context, "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show()
     }
 
-
     fun getListCart(): ArrayList<ItemsModel> {
-        return tinyDB.getListObject("CartList") ?: arrayListOf()
+        return tinyDB.getListObject(getCartKey()) ?: arrayListOf()
+    }
+
+    fun clearCart() {
+        tinyDB.remove(getCartKey()) // Xóa giỏ hàng chỉ của user hiện tại
     }
 
     fun minusItem(listItems: ArrayList<ItemsModel>, position: Int, listener: ChangeNumberItemsListener) {
@@ -55,4 +59,5 @@ class ManagementCart(val context: Context) {
         }
         return fee
     }
+
 }

@@ -9,6 +9,9 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        flatDir {
+            dirs ("D:/ZaloPayLib")
+        }
     }
 }
 dependencyResolutionManagement {

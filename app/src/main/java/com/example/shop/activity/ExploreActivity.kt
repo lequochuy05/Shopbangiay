@@ -13,7 +13,7 @@ import com.example.shop.adapter.ListItemsAdapter
 import com.example.shop.databinding.ActivityExploreBinding
 import com.example.shop.viewModel.ExploreViewModel
 
-class ExploreActivity : AppCompatActivity() {
+class ExploreActivity : BaseActivity() {
 
     private lateinit var binding: ActivityExploreBinding
     private lateinit var adapter: ListItemsAdapter
@@ -50,7 +50,7 @@ class ExploreActivity : AppCompatActivity() {
 
     private fun setupFilters() {
         val sizes = listOf("(Size) Tất cả", "36", "37", "38", "39", "40", "41", "42", "43")
-        val prices = listOf("(Giá) Tất cả", "Dưới 50$", "50$ - 100$", "Trên 100$")
+        val prices = listOf("(Giá) Tất cả", "Dưới 500.000", "500.000 - 2.000.000", "Trên 2.000.000")
 
         binding.sizeSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, sizes)
         binding.priceSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, prices)

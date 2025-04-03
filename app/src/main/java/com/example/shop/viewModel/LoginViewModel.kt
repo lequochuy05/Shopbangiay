@@ -1,5 +1,6 @@
     package com.example.shop.viewModel
 
+    import android.util.Log
     import androidx.lifecycle.LiveData
     import androidx.lifecycle.MutableLiveData
     import androidx.lifecycle.ViewModel
@@ -57,17 +58,20 @@
                             } else {
                                 // Nếu email chưa có, tạo tài khoản mới trong database
                                 val newUser = UserModel(
-                                    uId = user.uid,
-                                    uEmail = email,
-                                    uFirstName = user.displayName?.split(" ")?.firstOrNull() ?: "",
-                                    uLastName = user.displayName?.split(" ")?.lastOrNull() ?: "",
-                                    uPhoneNumber = user.phoneNumber ?: "",
-                                    uAddress = "",
-                                    dob = ""
+                                    id = user.uid,
+                                    email = email,
+                                    firstName = user.displayName?.split(" ")?.firstOrNull() ?: "",
+                                    lastName = user.displayName?.split(" ")?.lastOrNull() ?: "",
+                                    phoneNumber = "",
+                                    address = listOf(),
+                                    dob = "",
+                                    img = "",
                                 )
                                 loginRepository.registerNewUser(newUser)
                                 _userData.value = newUser
                                 _loginStatus.value = true
+                                Log.d("Firebase", "Registering new user: ${newUser.id}, ${newUser.email}")
+
                             }
                         }
                     }

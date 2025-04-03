@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -16,9 +17,11 @@
         android:theme="@style/Theme.Shop"
         tools:targetApi="31">
         <activity
+            android:name=".activity.OrderDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ExploreActivity"
             android:exported="false" />
-
         <activity
             android:name=".activity.OrderTrackingActivity"
             android:exported="false" />
@@ -27,7 +30,20 @@
             android:exported="false" />
         <activity
             android:name=".activity.PaymentDetailActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:label="Merchant Demo"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="app"
+                    android:scheme="demozpdk" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.SelectPaymentActivity"
             android:exported="false" />
@@ -66,7 +82,7 @@
         </activity>
         <activity
             android:name=".activity.LoginActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activity.RegisterActivity"
             android:exported="false" />

@@ -20,27 +20,30 @@ class CartActivity : BaseActivity() {
         binding = ActivityCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        managementCart = ManagementCart(this)
-
-        binding.paymentBtn.setOnClickListener{
-            startActivity(Intent(this, SelectPaymentActivity::class.java))
-        }
-
+        val sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
+        val uId = sharedPreferences.getString("uId", "Unknown").toString()
+        managementCart = ManagementCart(this, uId)  // Truyền userId vào
 
         setVariables()
         initCartList()
         calculateCart()
+
+        binding.paymentBtn.setOnClickListener {
+            if (!isUserLoggedIn()) {
+                showLoginDialog(this)
+            } else {
+                val totalAmount = calculateCart() // Lấy tổng tiền từ hàm
+                val intent = Intent(this, SelectPaymentActivity::class.java)
+                intent.putExtra("totalAmount", totalAmount) // Truyền giá trị tổng tiền
+                startActivity(intent)
+            }
+        }
+
     }
 
     private fun initCartList() {
         val listCart = managementCart.getListCart()
-        if (listCart.isEmpty()) {
-            binding.tvEmptyCart.visibility = View.VISIBLE
-            binding.cartView.visibility = View.GONE
-            binding.salesLayout.visibility = View.GONE
-            binding.priceLayout.visibility = View.GONE
-            binding.paymentBtn.visibility = View.GONE
-        } else {
+        if (listCart.isNotEmpty()) {
             binding.tvEmptyCart.visibility = View.GONE
             binding.scrollView3.visibility = View.VISIBLE
 
@@ -51,36 +54,44 @@ class CartActivity : BaseActivity() {
                     updateCartVisibility() // Cập nhật hiển thị giỏ hàng
                 }
             })
-        }
-    }
-
-    private fun updateCartVisibility() {
-        val listCart = managementCart.getListCart()
-        if (listCart.isEmpty()) {
+        } else {
             binding.tvEmptyCart.visibility = View.VISIBLE
             binding.cartView.visibility = View.GONE
             binding.salesLayout.visibility = View.GONE
             binding.priceLayout.visibility = View.GONE
             binding.paymentBtn.visibility = View.GONE
-        } else {
-            binding.tvEmptyCart.visibility = View.GONE
-            binding.scrollView3.visibility = View.VISIBLE
+
         }
     }
 
-    private fun calculateCart() {
+    private fun updateCartVisibility() {
+        val listCart = managementCart.getListCart()
+        if (listCart.isNotEmpty()) {
+            binding.tvEmptyCart.visibility = View.GONE
+            binding.scrollView3.visibility = View.VISIBLE
+        } else {
+            binding.tvEmptyCart.visibility = View.VISIBLE
+            binding.cartView.visibility = View.GONE
+            binding.salesLayout.visibility = View.GONE
+            binding.priceLayout.visibility = View.GONE
+            binding.paymentBtn.visibility = View.GONE
+        }
+    }
+
+    private fun calculateCart():Int {
         val percentTax = 0.02
-        val delivery = 10
+        val delivery = 10000
         tax = (managementCart.getTotalFee() * percentTax).roundToInt().toDouble()
         val total = (managementCart.getTotalFee() + tax + delivery).roundToInt().toInt()
         val itemTotal = managementCart.getTotalFee().roundToInt().toInt()
 
         with(binding) {
-            totalFeeTxt.text = "$$itemTotal"
-            taxTxt.text = "$$tax"
-            deliveryTxt.text = "$$delivery"
-            totalTxt.text = "$$total"
+            totalFeeTxt.text = "$itemTotal VND"
+            taxTxt.text = "$tax VND"
+            deliveryTxt.text = "$delivery VND"
+            totalTxt.text = "$total VND"
         }
+        return total
     }
 
     private fun setVariables() {

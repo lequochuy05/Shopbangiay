@@ -9,7 +9,7 @@ import com.example.shop.databinding.ActivityFavoriteBinding
 import com.example.shop.helper.ChangeNumberItemsListener
 import com.example.shop.helper.FavoriteManager
 
-class FavoriteActivity : AppCompatActivity() {
+class FavoriteActivity : BaseActivity() {
     private lateinit var binding: ActivityFavoriteBinding
     private lateinit var adapter: FavoriteAdapter
 

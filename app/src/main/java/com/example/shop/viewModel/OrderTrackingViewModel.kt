@@ -8,34 +8,24 @@ import com.example.shop.repository.OrderTrackingRepository
 
 class OrderTrackingViewModel : ViewModel() {
     private val repository = OrderTrackingRepository()
-
     private val _orders = MutableLiveData<List<OrderModel>>()
     val orders: LiveData<List<OrderModel>> get() = _orders
 
-    /**
-     * Lấy danh sách đơn hàng của user
-     */
     fun fetchOrders(userId: String) {
-        repository.getOrdersByUser(userId) { orderList ->
+        repository.fetchOrders(userId) { orderList ->
             _orders.value = orderList
         }
     }
 
-    /**
-     * Cập nhật trạng thái đơn hàng
-     */
-    fun updateOrderStatus(orderId: String, newStatus: String) {
-        repository.updateOrderStatus(orderId, newStatus) { success ->
-            if (success) fetchOrders(orderId) // Load lại danh sách sau khi cập nhật
+    fun addOrder(order: OrderModel) {
+        repository.addOrder(order) { success ->
+            if (success) fetchOrders(order.userId)
         }
     }
 
-    /**
-     * Hủy đơn hàng
-     */
     fun cancelOrder(orderId: String) {
         repository.cancelOrder(orderId) { success ->
-            if (success) fetchOrders(orderId)
+            if (success) _orders.value = _orders.value?.filterNot { it.orderId == orderId }
         }
     }
 }

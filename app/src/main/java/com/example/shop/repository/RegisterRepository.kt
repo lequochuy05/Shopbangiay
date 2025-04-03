@@ -8,20 +8,21 @@ class RegisterRepository {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val database: DatabaseReference = FirebaseDatabase.getInstance().getReference("UserAccount")
 
-    fun registerUser(firstName: String, lastName: String, phone: String, email: String, password: String,address:String?,dob:String?, callback: (Boolean, String) -> Unit) {
+    fun registerUser(firstName: String, lastName: String, phone: String, email: String, password: String, address:List<String>?, dob:String?, img:String?, callback: (Boolean, String) -> Unit) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 auth.currentUser?.sendEmailVerification()?.addOnSuccessListener {
                     val uid = auth.currentUser?.uid
                     uid?.let {
                         val userData = hashMapOf(
-                            "uId" to it,
-                            "uFirstName" to firstName,
-                            "uLastName" to lastName,
-                            "uPhoneNumber" to phone,
-                            "uEmail" to email,
-                            "uAddress" to (address ?: ""),
-                            "dob" to (dob ?: "")
+                            "id" to it,
+                            "firstName" to firstName,
+                            "lastName" to lastName,
+                            "phoneNumber" to phone,
+                            "email" to email,
+                            "address" to (address ?: listOf<String>()),
+                            "dob" to (dob ?: ""),
+                            "img" to (img ?: ""),
                         )
                         database.child(it).setValue(userData)
                     }

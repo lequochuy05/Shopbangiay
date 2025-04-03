@@ -43,20 +43,21 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <ImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/imgProfile"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_marginBottom="8dp"
-                    android:background="@drawable/ic_account"
-                    android:scaleType="centerCrop" />
+                    android:src="@drawable/ic_account"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/RoundedImage" />
 
                 <TextView
                     android:id="@+id/tvChangePhoto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:background="#afeeee"
+                    android:background="@drawable/s_p_pic_btn"
                     android:text="Thay đổi ảnh"
                     android:textColor="@color/blue"
                     android:textSize="@dimen/text_size_small"/>
@@ -127,6 +128,17 @@
                     android:inputType="phone"/>
 
                 <EditText
+                    android:id="@+id/etAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_top"
+                    android:hint="Địa chỉ"
+                    android:textSize="@dimen/text_size_small"
+                    android:padding="12dp"
+                    android:background="@drawable/et_profile_bg"
+                    android:inputType="text"/>
+
+                <EditText
                     android:id="@+id/etBirthDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -136,7 +148,6 @@
                     android:textSize="@dimen/text_size_small"
                     android:padding="12dp"
                     android:background="@drawable/et_profile_bg"
-                    android:inputType="none"
                     android:focusable="false"
                     tools:ignore="TextFields" />
 

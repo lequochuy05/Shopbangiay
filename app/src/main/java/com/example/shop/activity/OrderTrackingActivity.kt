@@ -1,50 +1,53 @@
 package com.example.shop.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shop.adapter.OrderAdapter
 import com.example.shop.databinding.ActivityOrderTrackingBinding
-import com.example.shop.model.OrderModel
 import com.example.shop.viewModel.OrderTrackingViewModel
 
-class OrderTrackingActivity : AppCompatActivity() {
+class OrderTrackingActivity : BaseActivity() {
     private lateinit var binding: ActivityOrderTrackingBinding
     private val orderViewModel: OrderTrackingViewModel by viewModels()
     private lateinit var orderAdapter: OrderAdapter
-    private var userId: String = "user_001"
+    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOrderTrackingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.backBtn.setOnClickListener{
+        // Lấy userId từ SharedPreferences
+        val sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
+        userId = sharedPreferences.getString("uId", "Khách") ?: "Khách"
+
+        binding.backBtn.setOnClickListener {
+            val intent = Intent(this, SettingActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
             finish()
         }
 
         setupRecyclerView()
         observeOrders()
 
-        // Load danh sách đơn hàng của user
+        // Gọi ViewModel để lấy danh sách đơn hàng
         orderViewModel.fetchOrders(userId)
     }
-
-    /**
-     * Thiết lập RecyclerView
-     */
     private fun setupRecyclerView() {
         orderAdapter = OrderAdapter(
             onCancelOrder = { orderId ->
                 orderViewModel.cancelOrder(orderId)
                 Toast.makeText(this, "Đã hủy đơn hàng", Toast.LENGTH_SHORT).show()
             },
-            onUpdateStatus = { orderId, newStatus ->
-                orderViewModel.updateOrderStatus(orderId, newStatus)
-                Toast.makeText(this, "Cập nhật trạng thái đơn hàng", Toast.LENGTH_SHORT).show()
+            onOrderClick = { order -> // Khi nhấn vào đơn hàng
+                val intent = Intent(this, OrderDetailActivity::class.java)
+                intent.putExtra("order", order)
+                startActivity(intent)
             }
         )
 
@@ -54,9 +57,7 @@ class OrderTrackingActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Lắng nghe dữ liệu từ ViewModel
-     */
+
     private fun observeOrders() {
         orderViewModel.orders.observe(this) { orderList ->
             if (orderList.isEmpty()) {

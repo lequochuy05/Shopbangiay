@@ -31,7 +31,7 @@
         <LinearLayout
             android:id="@+id/layoutSpinner"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
             android:background="@drawable/light_blue_bg"
             android:layout_marginTop="@dimen/margin_top"
@@ -59,20 +59,20 @@
         <EditText
             android:id="@+id/etInputNewAddress"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginTop="@dimen/margin_top"
             android:background="@drawable/light_blue_bg"
-            android:hint="Enter adddress here"
+            android:hint="Nhập địa chỉ mới tại đây"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_small"
-            android:padding="18dp"
+            android:padding="12dp"
             android:visibility="gone"
             />
 
         <Button
             android:id="@+id/btnAddAddress"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center"
             android:textSize="@dimen/text_size_small"

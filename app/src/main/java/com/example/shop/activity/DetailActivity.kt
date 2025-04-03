@@ -25,7 +25,10 @@ class DetailActivity : BaseActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        managementCart = ManagementCart(this)
+        val sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
+        val uId = sharedPreferences.getString("uId", "Unknown").toString()
+        managementCart = ManagementCart(this, uId)  // Truyền userId vào
+
 
         getBundle()
         initList()
@@ -61,36 +64,50 @@ class DetailActivity : BaseActivity() {
         item = (intent.getSerializableExtra("object") as? ItemsModel?)!!
         binding.titleTxt.text = item.title
         binding.description.text = item.description
-        binding.priceTxt.text = "$ ${item.price}"
-        binding.ratingTxt.text = "${item.rating}"
+        binding.priceTxt.text = "${item.price} VND"
+        binding.ratingTxt.text = "${item.rating} VND"
+
 
         binding.addToCartBtn.setOnClickListener {
-            item.numberInCart = numberOrder
-            item.selectedSize = selectedSize
-            managementCart.insertItems(item)
+            if(!isUserLoggedIn()){
+                showLoginDialog(this)
+            }else {
+                // Kiểm tra xem người dùng đã chọn size hay chưa
+                if (selectedSize.isEmpty()) {
+                    Toast.makeText(this, "Please select a size", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                item.numberInCart = numberOrder
+                item.selectedSize = selectedSize
+                managementCart.insertItems(item)
+            }
         }
 
         binding.favBtn.setOnClickListener {
-            // Kiểm tra xem người dùng đã chọn size hay chưa
-            if (selectedSize.isEmpty()) {
-                Toast.makeText(this, "Please select a size", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+            if(!isUserLoggedIn()){
+                showLoginDialog(this)
+            }else {
+                // Kiểm tra xem người dùng đã chọn size hay chưa
+                if (selectedSize.isEmpty()) {
+                    Toast.makeText(this, "Please select a size", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
 
-            // Đảm bảo sản phẩm đã có kích cỡ được chọn
-            item.selectedSize = selectedSize
+                // Đảm bảo sản phẩm đã có kích cỡ được chọn
+                item.selectedSize = selectedSize
 
-            if (!FavoriteManager.isFavorite(item)) {
+                if (!FavoriteManager.isFavorite(item)) {
 
-                FavoriteManager.addFavorite(item)
-                binding.favBtn.setImageResource(R.drawable.fav_icon)
-                binding.favBtn.setColorFilter(R.color.red)
-                Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show()
-            } else {
-                // Nếu sản phẩm đã có, loại bỏ khỏi favorites và cập nhật icon
-                FavoriteManager.removeFavorite(item)
-                binding.favBtn.setImageResource(R.drawable.fav_icon)
-                Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show()
+                    FavoriteManager.addFavorite(item)
+                    binding.favBtn.setImageResource(R.drawable.fav_icon)
+                    binding.favBtn.setColorFilter(R.color.red)
+                    Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Nếu sản phẩm đã có, loại bỏ khỏi favorites và cập nhật icon
+                    FavoriteManager.removeFavorite(item)
+                    binding.favBtn.setImageResource(R.drawable.fav_icon)
+                    Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -99,7 +116,12 @@ class DetailActivity : BaseActivity() {
             finish()
         }
         binding.cartBtn.setOnClickListener {
-            startActivity(Intent(this, CartActivity::class.java))
+            if(!isUserLoggedIn()){
+                showLoginDialog(this)
+            }else {
+                val intent = Intent(this, CartActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 }

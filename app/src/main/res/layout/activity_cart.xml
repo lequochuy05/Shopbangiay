@@ -140,7 +140,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top"
-                    android:text="Phí"
+                    android:text="Phí VAT"
                     android:textSize="@dimen/text_size_small"
                     android:textColor="@color/black"
                     android:textStyle="bold"
@@ -174,8 +174,7 @@
                     android:id="@+id/totalFeeTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$"
-                    android:textSize="@dimen/text_size_small"
+                    android:text="0 VND"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent" />
 
@@ -184,8 +183,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top"
-                    android:text="$ "
-                    android:textSize="@dimen/text_size_small"
+                    android:text="0 VND"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/totalFeeTxt" />
@@ -195,8 +193,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top"
-                    android:text="$ "
-                    android:textSize="@dimen/text_size_small"
+                    android:text="0 VND"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/deliveryTxt" />
@@ -206,8 +203,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top"
-                    android:text="$0"
-                    android:textSize="@dimen/text_size_small"
+                    android:text="0 VND"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/taxTxt" />
@@ -218,7 +214,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top"
                     android:text="Tổng"
-                    android:textSize="@dimen/text_size_small"
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     app:layout_constraintTop_toBottomOf="@+id/view" />
@@ -228,8 +223,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top"
-                    android:text="$ "
-                    android:textSize="@dimen/text_size_small"
+                    android:text="0 VND"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view" />

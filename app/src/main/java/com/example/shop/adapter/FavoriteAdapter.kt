@@ -32,7 +32,7 @@ class FavoriteAdapter(
         with(holder.binding) {
             titleTxt.text = item.title
             tvSize.text = "Size: ${item.selectedSize.ifEmpty { "Not selected" }}"
-            feeEachItem.text = "$${item.price}"
+            feeEachItem.text = "${item.price} VND"
 
             // Load hình ảnh sản phẩm
             Glide.with(holder.itemView.context)
@@ -46,7 +46,7 @@ class FavoriteAdapter(
                 notifyItemRemoved(position)
                 notifyItemRangeChanged(position, favoriteList.size)
 
-                // Gọi callback để cập nhật UI nếu danh sách trống
+            // Gọi callback để cập nhật UI nếu danh sách trống
                 changeNumberItemsListener.onChanged()
             }
         }
