@@ -1,4 +1,3 @@
-
 package com.example.shop.repository
 
 import com.example.shop.model.OrderModel
@@ -7,12 +6,22 @@ import com.google.firebase.database.*
 class OrderTrackingRepository {
     private val databaseRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("orders")
 
-    fun fetchOrders(userId: String, onResult: (List<OrderModel>) -> Unit) {
+    /**
+     * Lấy đơn hàng theo userId (và có thể lọc theo trạng thái nếu có)
+     */
+    fun fetchOrders(userId: String, statusFilter: String? = null, onResult: (List<OrderModel>) -> Unit) {
         databaseRef.orderByChild("userId").equalTo(userId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val orders = snapshot.children.mapNotNull { it.getValue(OrderModel::class.java) }
-                    onResult(orders)
+                    val allOrders = snapshot.children.mapNotNull { it.getValue(OrderModel::class.java) }
+
+                    val filteredOrders = if (statusFilter != null) {
+                        allOrders.filter { it.orderStatus == statusFilter }
+                    } else {
+                        allOrders
+                    }
+
+                    onResult(filteredOrders)
                 }
 
                 override fun onCancelled(error: DatabaseError) {

@@ -11,8 +11,11 @@ class OrderTrackingViewModel : ViewModel() {
     private val _orders = MutableLiveData<List<OrderModel>>()
     val orders: LiveData<List<OrderModel>> get() = _orders
 
-    fun fetchOrders(userId: String) {
-        repository.fetchOrders(userId) { orderList ->
+    /**
+     * Lấy đơn hàng theo userId và trạng thái (nếu có)
+     */
+    fun fetchOrders(userId: String, status: String? = null) {
+        repository.fetchOrders(userId, status) { orderList ->
             _orders.value = orderList
         }
     }
@@ -25,7 +28,9 @@ class OrderTrackingViewModel : ViewModel() {
 
     fun cancelOrder(orderId: String) {
         repository.cancelOrder(orderId) { success ->
-            if (success) _orders.value = _orders.value?.filterNot { it.orderId == orderId }
+            if (success) {
+                _orders.value = _orders.value?.filterNot { it.orderId == orderId }
+            }
         }
     }
 }
