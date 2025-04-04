@@ -2,15 +2,17 @@ package com.example.shop.activity
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shop.adapter.FavoriteAdapter
 import com.example.shop.databinding.ActivityFavoriteBinding
 import com.example.shop.helper.ChangeNumberItemsListener
-import com.example.shop.helper.FavoriteManager
+import com.example.shop.model.ItemsModel
+import com.example.shop.viewModel.FavoriteViewModel
 
 class FavoriteActivity : BaseActivity() {
     private lateinit var binding: ActivityFavoriteBinding
+    private val viewModel: FavoriteViewModel by viewModels()
     private lateinit var adapter: FavoriteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,30 +23,24 @@ class FavoriteActivity : BaseActivity() {
         binding.backBtn.setOnClickListener { finish() }
 
         setupRecyclerView()
-        updateFavVisibility()
+        observeData()
     }
 
     private fun setupRecyclerView() {
-        val favoriteList = FavoriteManager.getFavorites().toMutableList()
-        adapter = FavoriteAdapter(favoriteList, this, object : ChangeNumberItemsListener {
-            override fun onChanged() {
-                updateFavVisibility()
-            }
-        })
-
-        binding.favoriteRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this@FavoriteActivity)
-            adapter = this@FavoriteActivity.adapter
-        }
+        binding.favoriteRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-    private fun updateFavVisibility() {
-        if (FavoriteManager.getFavorites().isEmpty()) {
-            binding.tvEmptyCart.visibility = View.VISIBLE
-            binding.scrollView3.visibility = View.GONE
-        } else {
-            binding.tvEmptyCart.visibility = View.GONE
-            binding.scrollView3.visibility = View.VISIBLE
+    private fun observeData() {
+        viewModel.favorites.observe(this) { list ->
+            adapter = FavoriteAdapter(list.toMutableList(), this, object : ChangeNumberItemsListener {
+                override fun onChanged() {
+                    viewModel.loadFavorites()
+                }
+            })
+            binding.favoriteRecyclerView.adapter = adapter
+
+            binding.tvEmptyCart.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+            binding.scrollView3.visibility = if (list.isNotEmpty()) View.VISIBLE else View.GONE
         }
     }
 }

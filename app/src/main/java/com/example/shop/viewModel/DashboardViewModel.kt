@@ -16,5 +16,7 @@ class DashboardViewModel : ViewModel() {
     fun loadItems(categoryId:String): LiveData<MutableList<ItemsModel>> {
         return repository.loadItems(categoryId)
     }
-
+    fun loadUserProfile(userId: String): LiveData<String> {
+        return repository.loadUserProfile(userId)
+    }
 }

@@ -24,7 +24,6 @@ class LoginRepository {
      */
     fun getUserData(firebaseUid: String, callback: (UserModel?) -> Unit) {
         database.child(firebaseUid).get()
-
             .addOnSuccessListener { snapshot ->
                 if (snapshot.exists()) {
                     val addressList = mutableListOf<String>()
@@ -51,7 +50,6 @@ class LoginRepository {
                 callback(null)
             }
     }
-
 
     /**
      * Check email exists in database
@@ -83,9 +81,20 @@ class LoginRepository {
      * Register new account
      */
     fun registerNewUser(user: UserModel) {
-        database.child(user.id).setValue(user)
-
+        try {
+            database.child(user.id).setValue(user)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
-    fun getCurrentUser() = auth.currentUser
+    /**
+     * Lấy người dùng hiện tại
+     */
+    fun getCurrentUser() = try {
+        auth.currentUser
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
 }

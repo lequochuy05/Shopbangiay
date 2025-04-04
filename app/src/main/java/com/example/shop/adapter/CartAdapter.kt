@@ -12,15 +12,15 @@ import com.example.shop.helper.ChangeNumberItemsListener
 import com.example.shop.model.ItemsModel
 
 class CartAdapter(
-    private val listItemSelected: ArrayList<ItemsModel>,
+    val listItemSelected: ArrayList<ItemsModel>,
     context: Context,
+    private val userId: String,
     var changeNumberItemsListener: ChangeNumberItemsListener? = null
 ) : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
+
     inner class ViewHolder(val binding: ViewholderCartBinding) : RecyclerView.ViewHolder(binding.root)
 
-    private val sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE)
-    private val uId = sharedPreferences.getString("uId", "Unknown").toString()
-    private val managementCart = ManagementCart(context, uId) // Truyền userId vào
+    private val managementCart = ManagementCart(context, userId)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ViewholderCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -34,7 +34,6 @@ class CartAdapter(
         holder.binding.totalEachItem.text = "${Math.round(item.numberInCart * item.price)} VND"
         holder.binding.numberItemTxt.text = item.numberInCart.toString()
 
-        // Hiển thị kích cỡ đã chọn (selectedSize)
         holder.binding.tvSize.text = if (item.selectedSize.isNotEmpty()) "Size: ${item.selectedSize}" else "Size: Not selected"
 
         Glide.with(holder.itemView.context)
@@ -60,6 +59,13 @@ class CartAdapter(
                 }
             })
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateList(newList: ArrayList<ItemsModel>) {
+        listItemSelected.clear()
+        listItemSelected.addAll(newList)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = listItemSelected.size

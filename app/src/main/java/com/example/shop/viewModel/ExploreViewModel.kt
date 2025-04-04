@@ -21,19 +21,25 @@ class ExploreViewModel : ViewModel() {
     }
 
     fun filterItems(searchText: String, selectedSize: String, selectedPrice: String) {
-        val allItems = itemsList.value ?: return
-        val filtered = allItems.filter { item ->
-            val matchesSearch = item.title.lowercase().contains(searchText) ||
-                    item.description.lowercase().contains(searchText)
-            val matchesSize = selectedSize == "(Size) Tất cả" || item.size.contains(selectedSize)
-            val matchesPrice = when (selectedPrice) {
-                "Dưới 500.000" -> item.price < 500000
-                "500.000 - 2.000.000" -> item.price in 500000.0..2000000.0
-                "Trên 2.000.000" -> item.price > 2000000
-                else -> true
+        try {
+            val allItems = itemsList.value ?: return
+            val filtered = allItems.filter { item ->
+                val matchesSearch = item.title.lowercase().contains(searchText) ||
+                        item.description.lowercase().contains(searchText)
+                val matchesSize = selectedSize == "(Size) Tất cả" || item.size.contains(selectedSize)
+                val matchesPrice = when (selectedPrice) {
+                    "Dưới 500.000" -> item.price < 500000
+                    "500.000 - 2.000.000" -> item.price in 500000.0..2000000.0
+                    "Trên 2.000.000" -> item.price > 2000000
+                    else -> true
+                }
+                matchesSearch && matchesSize && matchesPrice
             }
-            matchesSearch && matchesSize && matchesPrice
+            _filteredList.value = filtered
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _filteredList.value = emptyList() // fallback để không crash
         }
-        _filteredList.value = filtered
     }
+
 }

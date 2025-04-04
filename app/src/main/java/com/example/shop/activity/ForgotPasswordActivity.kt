@@ -2,45 +2,55 @@ package com.example.shop.activity
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import com.example.shop.databinding.ActivityForgotPasswordBinding
-import com.google.firebase.auth.FirebaseAuth
+import com.example.shop.repository.ForgotPasswordRepository
+import com.example.shop.viewModel.ForgotPasswordViewModel
 
 class ForgotPasswordActivity : BaseActivity() {
 
     private lateinit var binding: ActivityForgotPasswordBinding
-    private lateinit var auth: FirebaseAuth
+
+    private val viewModel: ForgotPasswordViewModel by viewModels {
+        object : androidx.lifecycle.ViewModelProvider.Factory {
+            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                val repo = ForgotPasswordRepository()
+                return ForgotPasswordViewModel(repo) as T
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityForgotPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        auth = FirebaseAuth.getInstance()
-
+        //  Đặt lại mật khẩu
         binding.resetPasswordBtn.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
             if (email.isEmpty()) {
                 binding.etEmail.error = "Email không được để trống"
                 binding.etEmail.requestFocus()
             } else {
-                resetPassword(email)
+                viewModel.resetPassword(email)
             }
         }
 
-        binding.cancelBtn.setOnClickListener{
+        // Nút hủy bỏ
+        binding.cancelBtn.setOnClickListener {
             finish()
         }
-    }
 
-    private fun resetPassword(email: String) {
-        auth.sendPasswordResetEmail(email)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(this, "Đã gửi email đặt lại mật khẩu đến $email", Toast.LENGTH_SHORT).show()
-                    finish()
-                } else {
-                    Toast.makeText(this, "Lỗi: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                }
+        // Quan sát kết quả đặt lại mật khẩu
+        viewModel.resetStatus.observe(this, Observer { result ->
+            result.onSuccess {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                finish()
             }
+            result.onFailure {
+                Toast.makeText(this, "Lỗi: ${it.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

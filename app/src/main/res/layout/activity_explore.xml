@@ -14,7 +14,7 @@
         android:id="@+id/titleCart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="48dp">
+        android:paddingTop="32dp">
 
         <TextView
             android:id="@+id/textView4"
@@ -33,7 +33,6 @@
             android:id="@+id/backBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_start"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/back" />

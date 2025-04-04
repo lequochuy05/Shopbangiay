@@ -14,7 +14,6 @@ class OrderTrackingActivity : BaseActivity() {
     private lateinit var binding: ActivityOrderTrackingBinding
     private val orderViewModel: OrderTrackingViewModel by viewModels()
     private lateinit var orderAdapter: OrderAdapter
-    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +22,7 @@ class OrderTrackingActivity : BaseActivity() {
 
         // Lấy userId từ SharedPreferences
         val sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
-        userId = sharedPreferences.getString("uId", "Khách") ?: "Khách"
+        val userId = sharedPreferences.getString("uId", "") ?: ""
 
         binding.backBtn.setOnClickListener {
             val intent = Intent(this, SettingActivity::class.java)

@@ -1,3 +1,4 @@
+// DetailActivity.kt
 package com.example.shop.activity
 
 import android.content.Intent
@@ -25,54 +26,28 @@ class DetailActivity : BaseActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
-        val uId = sharedPreferences.getString("uId", "Unknown").toString()
-        managementCart = ManagementCart(this, uId)  // Truyền userId vào
-
+        val uId = userId
+        managementCart = ManagementCart(this, uId)
 
         getBundle()
         initList()
     }
 
     private fun initList() {
-        // Thiết lập danh sách ảnh
-        val colorList = ArrayList<String>()
-        for (imageUrl in item.picUrl) {
-            colorList.add(imageUrl)
-        }
-        Glide.with(this)
-            .load(colorList[0])
-            .into(binding.picMain)
+        Glide.with(this).load(item.picUrl[0]).into(binding.picMain)
 
-        binding.picList.adapter = PicListAdapter(colorList, binding.picMain)
-        binding.picList.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.picList.adapter = PicListAdapter(item.picUrl, binding.picMain)
+        binding.picList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-        // Thiết lập danh sách kích cỡ (size)
-        val sizeList = ArrayList<String>()
-        for (size in item.size) {
-            sizeList.add(size)
-        }
-        binding.sizeList.adapter = SizeListAdapter(sizeList) { size ->
+        binding.sizeList.adapter = SizeListAdapter(item.size) { size ->
             selectedSize = size
         }
-        binding.sizeList.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-    }
-
-    private fun getBundle() {
-        item = (intent.getSerializableExtra("object") as? ItemsModel?)!!
-        binding.titleTxt.text = item.title
-        binding.description.text = item.description
-        binding.priceTxt.text = "${item.price} VND"
-        binding.ratingTxt.text = "${item.rating} VND"
-
+        binding.sizeList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         binding.addToCartBtn.setOnClickListener {
-            if(!isUserLoggedIn()){
+            if (!isUserLoggedIn()) {
                 showLoginDialog(this)
-            }else {
-                // Kiểm tra xem người dùng đã chọn size hay chưa
+            } else {
                 if (selectedSize.isEmpty()) {
                     Toast.makeText(this, "Please select a size", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
@@ -84,44 +59,43 @@ class DetailActivity : BaseActivity() {
         }
 
         binding.favBtn.setOnClickListener {
-            if(!isUserLoggedIn()){
+            if (!isUserLoggedIn()) {
                 showLoginDialog(this)
-            }else {
-                // Kiểm tra xem người dùng đã chọn size hay chưa
+            } else {
                 if (selectedSize.isEmpty()) {
                     Toast.makeText(this, "Please select a size", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
-
-                // Đảm bảo sản phẩm đã có kích cỡ được chọn
                 item.selectedSize = selectedSize
-
                 if (!FavoriteManager.isFavorite(item)) {
-
                     FavoriteManager.addFavorite(item)
                     binding.favBtn.setImageResource(R.drawable.fav_icon)
                     binding.favBtn.setColorFilter(R.color.red)
-                    Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show()
                 } else {
-                    // Nếu sản phẩm đã có, loại bỏ khỏi favorites và cập nhật icon
                     FavoriteManager.removeFavorite(item)
                     binding.favBtn.setImageResource(R.drawable.fav_icon)
-                    Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-
-        binding.backBtn.setOnClickListener {
-            finish()
-        }
+        binding.backBtn.setOnClickListener { finish() }
         binding.cartBtn.setOnClickListener {
-            if(!isUserLoggedIn()){
+            if (!isUserLoggedIn()) {
                 showLoginDialog(this)
-            }else {
+            } else {
                 val intent = Intent(this, CartActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                 startActivity(intent)
             }
         }
+
+        binding.titleTxt.text = item.title
+        binding.description.text = item.description
+        binding.priceTxt.text = "${item.price} VND"
+        binding.ratingTxt.text = "${item.rating} VND"
+    }
+
+    private fun getBundle() {
+        item = intent.getSerializableExtra("object") as? ItemsModel ?: ItemsModel()
     }
 }

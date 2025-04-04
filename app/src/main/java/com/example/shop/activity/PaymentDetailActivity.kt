@@ -199,25 +199,11 @@ class PaymentDetailActivity : BaseActivity() {
         }
     }
 
-    private fun getCurrentDateTime(): String {
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
-        return sdf.format(Date())
-    }
-
     private fun clearCart() {
         val sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
         val uId = sharedPreferences.getString("uId", "Unknown").toString()
-        val managementCart = ManagementCart(this, uId)  // Truyền userId vào
+        val managementCart = ManagementCart(this, uId)
         managementCart.clearCart()
     }
-    fun generateRandomString(length: Int): String {
-        val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-        val random = SecureRandom()
-        return (1..length)
-            .map { chars[random.nextInt(chars.length)] }
-            .joinToString("")
-    }
+
 }
-
-
-

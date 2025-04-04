@@ -28,10 +28,12 @@
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
 
+        <!--Header-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/titleCart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/margin_bottom"
             android:paddingTop="48dp">
 
             <TextView
@@ -56,6 +58,15 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/back" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--Spinner-->
+        <Spinner
+            android:id="@+id/spinnerStatusFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top"
+            android:layout_marginBottom="8dp"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewOrders"

@@ -1,5 +1,6 @@
 package com.example.shop.activity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -33,20 +34,60 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityProfileBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        try {
+            binding = ActivityProfileBinding.inflate(layoutInflater)
+            setContentView(binding.root)
 
-        viewModel.loadUserData()
+            viewModel.loadUserData()
 
-        binding.backBtn.setOnClickListener { finish() }
-        binding.tvChangePhoto.setOnClickListener { selectImage() }
-        binding.btnSavePhoto.setOnClickListener { selectedBitmap?.let { viewModel.uploadProfileImage(it) } }
-        binding.etBirthDate.setOnClickListener { showDatePickerDialog() }
-        binding.btnSaveInfo.setOnClickListener { saveUserInfo() }
-        checkLoginMethod()
-        binding.btnSavePassword.setOnClickListener { changePassword() }
+            binding.backBtn.setOnClickListener { finish() }
+            binding.tvChangePhoto.setOnClickListener {
+                try {
+                    selectImage()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(this, "Lỗi khi chọn ảnh", Toast.LENGTH_SHORT).show()
+                }
+            }
+            binding.btnSavePhoto.setOnClickListener {
+                try {
+                    selectedBitmap?.let { viewModel.uploadProfileImage(it) }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(this, "Lỗi khi lưu ảnh", Toast.LENGTH_SHORT).show()
+                }
+            }
+            binding.etBirthDate.setOnClickListener {
+                try {
+                    showDatePickerDialog()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(this, "Lỗi khi hiển thị lịch", Toast.LENGTH_SHORT).show()
+                }
+            }
+            binding.btnSaveInfo.setOnClickListener {
+                try {
+                    saveUserInfo()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(this, "Lỗi khi lưu thông tin người dùng", Toast.LENGTH_SHORT).show()
+                }
+            }
+            checkLoginMethod()
+            binding.btnSavePassword.setOnClickListener {
+                try {
+                    changePassword()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(this, "Lỗi khi thay đổi mật khẩu", Toast.LENGTH_SHORT).show()
+                }
+            }
 
-        observeViewModel()
+            observeViewModel()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Lỗi khi khởi tạo ProfileActivity", Toast.LENGTH_SHORT).show()
+        }
     }
 
     /**
@@ -54,17 +95,33 @@ class ProfileActivity : AppCompatActivity() {
      */
     private fun observeViewModel() {
         viewModel.userData.observe(this, Observer { user ->
-            binding.etFirstName.setText(user.firstName)
-            binding.etLastName.setText(user.lastName)
-            binding.etPhoneNumber.setText(user.phoneNumber)
-            binding.etAddress.setText(user.address?.firstOrNull() ?: "")
-            binding.etBirthDate.setText(user.dob ?: "")
-            user.img?.let { binding.imgProfile.setImageBitmap(viewModel.decodeBase64Image(it)) }
+            try {
+                binding.etFirstName.setText(user.firstName)
+                binding.etLastName.setText(user.lastName)
+                binding.etPhoneNumber.setText(user.phoneNumber)
+                binding.etAddress.setText(user.address?.firstOrNull() ?: "")
+                binding.etBirthDate.setText(user.dob ?: "")
+                user.img?.let {
+                    val bitmap = viewModel.decodeBase64Image(it)
+                    if(bitmap != null){
+                        binding.imgProfile.setImageBitmap(bitmap)
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this, "Lỗi khi cập nhật dữ liệu người dùng", Toast.LENGTH_SHORT).show()
+            }
         })
 
         viewModel.updateSuccess.observe(this, Observer { success ->
-            if (success) Toast.makeText(this, "Cập nhật thành công", Toast.LENGTH_SHORT).show()
-            else Toast.makeText(this, "Lỗi cập nhật", Toast.LENGTH_SHORT).show()
+            try {
+                if (success)
+                    Toast.makeText(this, "Cập nhật thành công", Toast.LENGTH_SHORT).show()
+                else
+                    Toast.makeText(this, "Lỗi cập nhật", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         })
     }
 
@@ -72,101 +129,132 @@ class ProfileActivity : AppCompatActivity() {
      * Lưu thông tin người dùng
      */
     private fun saveUserInfo() {
-        val userUpdates = mapOf(
-            "firstName" to binding.etFirstName.text.toString(),
-            "lastName" to binding.etLastName.text.toString(),
-            "phoneNumber" to binding.etPhoneNumber.text.toString(),
-            "address" to listOf(binding.etAddress.text.toString()),
-            "dob" to binding.etBirthDate.text.toString()
-        )
-        viewModel.saveUserInfo(userUpdates)
+        try {
+            val userUpdates = mapOf(
+                "firstName" to binding.etFirstName.text.toString(),
+                "lastName" to binding.etLastName.text.toString(),
+                "phoneNumber" to binding.etPhoneNumber.text.toString(),
+                "address" to listOf(binding.etAddress.text.toString()),
+                "dob" to binding.etBirthDate.text.toString()
+            )
+            viewModel.saveUserInfo(userUpdates)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Lỗi khi lưu thông tin", Toast.LENGTH_SHORT).show()
+        }
     }
     /**
      * Người dùng chọn ảnh để hiển thị
      */
     private fun selectImage() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        startActivityForResult(intent, 100)
-    }
-
-    /**
-     * set ảnh người dùng đã chọn
-     */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 100 && resultCode == Activity.RESULT_OK && data != null) {
-            val imageUri = data.data
-            val inputStream = contentResolver.openInputStream(imageUri!!)
-            selectedBitmap = BitmapFactory.decodeStream(inputStream)
-            binding.imgProfile.setImageBitmap(selectedBitmap)
+        try {
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, 100)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Lỗi khi mở bộ chọn ảnh", Toast.LENGTH_SHORT).show()
         }
     }
 
     /**
-     * Show lịch để người dùng chọn
+     * Set ảnh người dùng đã chọn
      */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        try {
+            if (requestCode == 100 && resultCode == Activity.RESULT_OK && data != null) {
+                val imageUri = data.data
+                val inputStream = contentResolver.openInputStream(imageUri!!)
+                selectedBitmap = BitmapFactory.decodeStream(inputStream)
+                binding.imgProfile.setImageBitmap(selectedBitmap)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Lỗi khi xử lý ảnh", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /**
+     * Hiển thị lịch để người dùng chọn
+     */
+    @SuppressLint("DefaultLocale")
     private fun showDatePickerDialog() {
-        val calendar = Calendar.getInstance()
-        val datePickerDialog = DatePickerDialog(
-            this,
-            { _, year, month, day ->
-                binding.etBirthDate.setText(String.format("%02d/%02d/%d", day, month + 1, year))
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        datePickerDialog.show()
+        try {
+            val calendar = Calendar.getInstance()
+            val datePickerDialog = DatePickerDialog(
+                this,
+                { _, year, month, day ->
+                    binding.etBirthDate.setText(String.format("%02d/%02d/%d", day, month + 1, year))
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            )
+            datePickerDialog.show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Lỗi khi hiển thị lịch", Toast.LENGTH_SHORT).show()
+        }
     }
 
     /**
      * Cập nhật mật khẩu
      */
     private fun changePassword(){
-        val oldPassword = binding.etOldPassword.text.toString()
-        val newPassword = binding.etNewPassword.text.toString()
+        try {
+            val oldPassword = binding.etOldPassword.text.toString()
+            val newPassword = binding.etNewPassword.text.toString()
 
-        if (oldPassword.isEmpty() || newPassword.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show()
-            return
-        }
+            if (oldPassword.isEmpty() || newPassword.isEmpty()) {
+                Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show()
+                return
+            }
 
-        viewModel.changePassword(oldPassword, newPassword) { success, message ->
-            runOnUiThread {
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-                if (success) {
-                    binding.etOldPassword.text.clear()
-                    binding.etNewPassword.text.clear()
+            viewModel.changePassword(oldPassword, newPassword) { success, message ->
+                runOnUiThread {
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    if (success) {
+                        binding.etOldPassword.text.clear()
+                        binding.etNewPassword.text.clear()
+                    }
                 }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Lỗi khi thay đổi mật khẩu", Toast.LENGTH_SHORT).show()
         }
     }
     /**
-     * Check tài khoản đăng nhập
+     * Kiểm tra tài khoản đăng nhập
      */
     private fun checkLoginMethod() {
-        val user = FirebaseAuth.getInstance().currentUser
-        user?.let {
-            var isGoogleUser = false
-            var hasEmailProvider = false
+        try {
+            val user = FirebaseAuth.getInstance().currentUser
+            user?.let {
+                var isGoogleUser = false
+                var hasEmailProvider = false
 
-            for (profile in it.providerData) {
-                if (profile.providerId == "google.com") {
-                    isGoogleUser = true
+                for (profile in it.providerData) {
+                    if (profile.providerId == "google.com") {
+                        isGoogleUser = true
+                    }
+                    if (profile.providerId == "password") {
+                        hasEmailProvider = true
+                    }
                 }
-                if (profile.providerId == "password") {
-                    hasEmailProvider = true
+
+                // Nếu tài khoản chỉ đăng nhập bằng Google, vô hiệu hóa đổi mật khẩu
+                if (isGoogleUser && !hasEmailProvider) {
+                    binding.etOldPassword.isEnabled = false
+                    binding.etNewPassword.isEnabled = false
+                    binding.btnSavePassword.isEnabled = false
+                    Toast.makeText(this, "Bạn đang đăng nhập bằng Google, không thể đặt lại mật khẩu", Toast.LENGTH_LONG).show()
                 }
             }
-
-            // Nếu tài khoản chỉ đăng nhập bằng Google, vô hiệu hóa đổi mật khẩu
-            if (isGoogleUser && !hasEmailProvider) {
-                binding.etOldPassword.isEnabled = false
-                binding.etNewPassword.isEnabled = false
-                binding.btnSavePassword.isEnabled = false
-                Toast.makeText(this, "Bạn đã đăng nhập bằng Google, vui lòng đặt lại mật khẩu qua email!", Toast.LENGTH_LONG).show()
-            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Lỗi khi kiểm tra tài khoản", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -8,5 +8,5 @@ data class OrderItemModel(
     var itemPrice: Double = 0.0,
     var itemQuantity: Int = 0,
     var selectedSize: String = "",
-    var picUrl:ArrayList<String>? = ArrayList(),
+    var picUrl:List<String>? = emptyList(),
 ) : Serializable

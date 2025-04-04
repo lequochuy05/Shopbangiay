@@ -1,5 +1,6 @@
 package com.example.shop.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ class OrderAdapter(
 
     private var orderList: List<OrderModel> = emptyList()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun submitList(newList: List<OrderModel>) {
         orderList = newList
         notifyDataSetChanged()
@@ -48,4 +50,3 @@ class OrderAdapter(
         }
     }
 }
-

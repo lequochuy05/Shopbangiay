@@ -14,6 +14,9 @@ import com.google.firebase.database.ValueEventListener
 class DashboardRepository {
     private val firebaseDatabase = FirebaseDatabase.getInstance()
 
+    /**
+     * Danh mục sản phẩm
+     */
     fun loadCategory(): LiveData<MutableList<CategoryModel>> {
 
         val categoryLiveData = MutableLiveData<MutableList<CategoryModel>>()
@@ -39,6 +42,9 @@ class DashboardRepository {
         return categoryLiveData
     }
 
+    /**
+     * Sản phẩm bán chạy
+     */
     fun loadBestSeller(): LiveData<MutableList<ItemsModel>> {
         val bestSellerLiveData = MutableLiveData<MutableList<ItemsModel>>()
         val ref = firebaseDatabase.getReference("BestSeller")
@@ -63,6 +69,9 @@ class DashboardRepository {
         return bestSellerLiveData
     }
 
+    /**
+     * load danh sách sản phẩm
+     */
     fun loadItems(categoryId:String): LiveData<MutableList<ItemsModel>> {
         val itemsLiveData = MutableLiveData<MutableList<ItemsModel>>()
         val ref = firebaseDatabase.getReference("Items")
@@ -87,4 +96,34 @@ class DashboardRepository {
         })
         return itemsLiveData
     }
+
+    /**
+     * load user
+     */
+    fun loadUserProfile(userId: String): LiveData<String> {
+        val fullNameLiveData = MutableLiveData<String>()
+        val database = firebaseDatabase.getReference("UserAccount")
+
+        try {
+            database.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val firstName = snapshot.child("firstName").getValue(String::class.java) ?: ""
+                    val lastName = snapshot.child("lastName").getValue(String::class.java) ?: ""
+                    val fullName = "$firstName $lastName".trim()
+
+                    fullNameLiveData.value = if (fullName.isNotEmpty()) fullName else "Khách"
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    fullNameLiveData.value = "Khách"
+                }
+            })
+        } catch (e: Exception) {
+            e.printStackTrace()
+            fullNameLiveData.value = "Khách"
+        }
+
+        return fullNameLiveData
+    }
+
 }

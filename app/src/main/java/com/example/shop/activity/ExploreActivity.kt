@@ -6,8 +6,8 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shop.adapter.ListItemsAdapter
 import com.example.shop.databinding.ActivityExploreBinding
@@ -67,12 +67,18 @@ class ExploreActivity : BaseActivity() {
     }
 
     private fun filterItems() {
-        val searchText = binding.searchEditText.text.toString().lowercase()
-        val selectedSize = binding.sizeSpinner.selectedItem.toString()
-        val selectedPrice = binding.priceSpinner.selectedItem.toString()
+        try {
+            val searchText = binding.searchEditText.text.toString().lowercase()
+            val selectedSize = binding.sizeSpinner.selectedItem.toString()
+            val selectedPrice = binding.priceSpinner.selectedItem.toString()
 
-        viewModel.filterItems(searchText, selectedSize, selectedPrice)
+            viewModel.filterItems(searchText, selectedSize, selectedPrice)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Lỗi khi lọc dữ liệu", Toast.LENGTH_SHORT).show()
+        }
     }
+
 
     private fun observeViewModel() {
         viewModel.filteredList.observe(this) { items ->

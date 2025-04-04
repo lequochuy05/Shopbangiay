@@ -3,7 +3,6 @@ package com.example.shop.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shop.adapter.BestSellerAdapter
@@ -11,11 +10,6 @@ import com.example.shop.adapter.CategoryAdapter
 import com.example.shop.databinding.ActivityDashboardBinding
 import com.example.shop.repository.LoginRepository
 import com.example.shop.viewModel.DashboardViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 
 class DashboardActivity : BaseActivity() {
 
@@ -84,6 +78,7 @@ class DashboardActivity : BaseActivity() {
             binding.progressBarBestSeller.visibility = View.GONE
         })
     }
+
     private fun loadUserData() {
         val loginRepository = LoginRepository()
         val firebaseUser = loginRepository.getCurrentUser()
@@ -92,22 +87,11 @@ class DashboardActivity : BaseActivity() {
             binding.tvName.text = "Khách"
         } else {
             val userId = firebaseUser.uid
-            val database = FirebaseDatabase.getInstance().getReference("UserAccount")
 
-            database.child(userId).addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val firstName = snapshot.child("firstName").getValue(String::class.java) ?: ""
-                    val lastName = snapshot.child("lastName").getValue(String::class.java) ?: ""
-                    val fullName = "$firstName $lastName".trim()
-
-                    binding.tvName.text = if (fullName.isNotEmpty()) fullName else (firebaseUser.displayName ?: "Khách")
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    binding.tvName.text = firebaseUser.displayName ?: "Khách"
-                    Toast.makeText(this@DashboardActivity, "Không thể tải dữ liệu", Toast.LENGTH_SHORT).show()
-                }
-            })
+            // Gọi qua ViewModel
+            viewModel.loadUserProfile(userId).observe(this) { fullName ->
+                binding.tvName.text = fullName
+            }
         }
     }
 

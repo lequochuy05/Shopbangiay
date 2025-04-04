@@ -24,19 +24,24 @@
          * Login with email/password
          */
         fun loginUserWithEmail(email: String, password: String) {
-            loginRepository.loginWithEmail(email, password) { task ->
-                if (task.isSuccessful) {
-                    val user = loginRepository.getCurrentUser()
-                    if (user != null && user.isEmailVerified) {
-                        fetchUserData(user.uid)
+            try {
+                loginRepository.loginWithEmail(email, password) { task ->
+                    if (task.isSuccessful) {
+                        val user = loginRepository.getCurrentUser()
+                        if (user != null && user.isEmailVerified) {
+                            fetchUserData(user.uid)
+                        } else {
+                            _loginError.value = "Vui lòng xác thực email trước khi đăng nhập"
+                            _loginStatus.value = false
+                        }
                     } else {
-                        _loginError.value = "Vui lòng xác thực email trước khi đăng nhập"
+                        _loginError.value = "Email hoặc mật khẩu không đúng"
                         _loginStatus.value = false
                     }
-                } else {
-                    _loginError.value = "Email hoặc mật khẩu không đúng"
-                    _loginStatus.value = false
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _loginError.value = "Lỗi đăng nhập: ${e.message}"
             }
         }
 
@@ -44,56 +49,62 @@
          * check email exists while login with google
          */
         fun loginWithGoogle(googleIdToken: String) {
-            loginRepository.loginWithGoogle(googleIdToken) { task ->
-                if (task.isSuccessful) {
-                    val firebaseUser = loginRepository.getCurrentUser()
-                    firebaseUser?.let { user ->
-                        val email = user.email ?: ""
-
-                        loginRepository.checkIfEmailExists(email) { existingUser ->
-                            if (existingUser != null) {
-                                // Nếu email đã có trong database, đăng nhập với UID tương ứng
-                                _userData.value = existingUser
-                                _loginStatus.value = true
-                            } else {
-                                // Nếu email chưa có, tạo tài khoản mới trong database
-                                val newUser = UserModel(
-                                    id = user.uid,
-                                    email = email,
-                                    firstName = user.displayName?.split(" ")?.firstOrNull() ?: "",
-                                    lastName = user.displayName?.split(" ")?.lastOrNull() ?: "",
-                                    phoneNumber = "",
-                                    address = listOf(),
-                                    dob = "",
-                                    img = "",
-                                )
-                                loginRepository.registerNewUser(newUser)
-                                _userData.value = newUser
-                                _loginStatus.value = true
-                                Log.d("Firebase", "Registering new user: ${newUser.id}, ${newUser.email}")
-
+            try {
+                loginRepository.loginWithGoogle(googleIdToken) { task ->
+                    if (task.isSuccessful) {
+                        val firebaseUser = loginRepository.getCurrentUser()
+                        firebaseUser?.let { user ->
+                            val email = user.email ?: ""
+                            loginRepository.checkIfEmailExists(email) { existingUser ->
+                                if (existingUser != null) {
+                                    _userData.value = existingUser
+                                    _loginStatus.value = true
+                                } else {
+                                    val newUser = UserModel(
+                                        id = user.uid,
+                                        email = email,
+                                        firstName = user.displayName?.split(" ")?.firstOrNull() ?: "",
+                                        lastName = user.displayName?.split(" ")?.lastOrNull() ?: "",
+                                        phoneNumber = "",
+                                        address = listOf(),
+                                        dob = "",
+                                        img = "",
+                                    )
+                                    loginRepository.registerNewUser(newUser)
+                                    _userData.value = newUser
+                                    _loginStatus.value = true
+                                }
                             }
                         }
+                    } else {
+                        _loginError.value = "Đăng nhập Google thất bại"
+                        _loginStatus.value = false
                     }
-                } else {
-                    _loginError.value = "Đăng nhập Google thất bại"
-                    _loginStatus.value = false
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _loginError.value = "Lỗi khi đăng nhập Google: ${e.message}"
             }
         }
+
 
         /**
          * Get data user
          */
         private fun fetchUserData(firebaseUid: String) {
-            loginRepository.getUserData(firebaseUid) { user ->
-                if (user != null) {
-                    _userData.value = user
-                    _loginStatus.value = true
-                } else {
-                    _loginError.value = "Không tìm thấy thông tin người dùng"
-                    _loginStatus.value = false
+            try {
+                loginRepository.getUserData(firebaseUid) { user ->
+                    if (user != null) {
+                        _userData.value = user
+                        _loginStatus.value = true
+                    } else {
+                        _loginError.value = "Không tìm thấy thông tin người dùng"
+                        _loginStatus.value = false
+                    }
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _loginError.value = "Lỗi lấy dữ liệu người dùng: ${e.message}"
             }
         }
     }
