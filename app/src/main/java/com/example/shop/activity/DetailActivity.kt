@@ -92,7 +92,7 @@ class DetailActivity : BaseActivity() {
         binding.titleTxt.text = item.title
         binding.description.text = item.description
         binding.priceTxt.text = "${item.price} VND"
-        binding.ratingTxt.text = "${item.rating} VND"
+        binding.ratingTxt.text = "${item.rating}"
     }
 
     private fun getBundle() {

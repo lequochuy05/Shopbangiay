@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/padding"
     tools:context=".activity.OrderTrackingActivity">
 
     <TextView
@@ -34,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/margin_bottom"
-            android:paddingTop="48dp">
+            android:paddingTop="32dp">
 
             <TextView
                 android:id="@+id/tvTitle"
@@ -54,19 +55,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_start"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/back" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!--Spinner-->
-        <Spinner
-            android:id="@+id/spinnerStatusFilter"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_top"
-            android:layout_marginBottom="8dp"
-            />
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <Spinner
+                android:id="@+id/spinnerStatusFilter"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:padding="10dp" />
+        </androidx.cardview.widget.CardView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewOrders"

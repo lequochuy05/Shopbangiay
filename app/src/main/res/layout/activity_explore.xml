@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#9E9E9E"
     android:padding="16dp"
     tools:context=".activity.ExploreActivity">
 
@@ -44,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top"
-        app:cardElevation="4dp"
+        app:cardElevation="2dp"
         app:cardCornerRadius="12dp">
 
         <EditText
@@ -64,7 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="@dimen/margin_top"
+       android:layout_marginVertical="@dimen/marginVerticall"
         android:gravity="center">
 
         <androidx.cardview.widget.CardView
@@ -73,7 +72,7 @@
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="2dp">
+            app:cardElevation="4dp">
 
             <Spinner
                 android:id="@+id/sizeSpinner"
@@ -112,7 +111,5 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="@dimen/margin_top"
-        android:paddingBottom="@dimen/margin_bottom" />
+        android:layout_weight="1" />
 </LinearLayout>

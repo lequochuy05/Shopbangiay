@@ -23,6 +23,11 @@ class SettingViewModel(application: Application) : AndroidViewModel(application)
     private val _navigateToOrderTracking = MutableLiveData<Boolean>()
     val navigateToOrderTracking: LiveData<Boolean> get() = _navigateToOrderTracking
 
+    private val _navigateToHelpCenter = MutableLiveData<Boolean>()
+    val navigateToHelpCenter: LiveData<Boolean> get() = _navigateToHelpCenter
+
+    private val _navigateToChat = MutableLiveData<Boolean>()
+    val navigateToChat: LiveData<Boolean> get() = _navigateToChat
 
     init {
         _settings.value = repository.getSettings()
@@ -33,6 +38,8 @@ class SettingViewModel(application: Application) : AndroidViewModel(application)
         val item = _settings.value?.get(position)
         when (item?.title) {
             "Theo dõi đơn hàng" -> _navigateToOrderTracking.value = true
+            "Trung tâm trợ giúp" -> _navigateToHelpCenter.value = true
+            "Hỗ trợ trực tuyến" -> _navigateToChat.value = true
             "Đăng xuất" -> {
                 if (repository.logout()) {
                     _logoutEvent.value = true

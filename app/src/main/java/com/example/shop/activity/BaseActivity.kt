@@ -24,7 +24,8 @@ open class BaseActivity : AppCompatActivity() {
         try {
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+
             )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -47,10 +48,10 @@ open class BaseActivity : AppCompatActivity() {
     /**
      * Lấy tên id dùng
      */
-    fun getIdUser(context: Context): String {
+    private fun getIdUser(context: Context): String {
         return try {
             val sharedPreferences = context.getSharedPreferences("UserData", MODE_PRIVATE)
-            sharedPreferences.getString("uId", "").toString()
+            sharedPreferences.getString("uId", "Khách").toString()
         } catch (e: Exception) {
             e.printStackTrace()
             ""

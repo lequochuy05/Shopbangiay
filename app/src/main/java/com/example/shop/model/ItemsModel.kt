@@ -12,5 +12,6 @@ data class ItemsModel(
     var price:Double=0.0,
     var rating:Double=0.0,
     var numberInCart:Int=0,
-    var selectedSize:String=""
+    var selectedSize:String="",
+    var bestSeller: Boolean = false
 ): Serializable

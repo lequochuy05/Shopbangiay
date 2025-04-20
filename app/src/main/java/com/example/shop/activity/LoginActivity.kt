@@ -3,6 +3,7 @@ package com.example.shop.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -56,6 +57,15 @@ class LoginActivity : BaseActivity() {
                 e.printStackTrace()
                 Toast.makeText(this, "Lỗi đăng nhập: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        // Tự động cuộn khi EditText được focus
+        binding.txtEmail.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) scrollToView(binding.txtEmail)
+        }
+
+        binding.txtPassword.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) scrollToView(binding.txtPassword)
         }
 
         binding.googleBtn.setOnClickListener {
@@ -129,6 +139,12 @@ class LoginActivity : BaseActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(this, "Không thể lưu thông tin người dùng", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun scrollToView(view: View) {
+        binding.loginScrollView.post {
+            binding.loginScrollView.smoothScrollTo(0, view.top)
         }
     }
 }

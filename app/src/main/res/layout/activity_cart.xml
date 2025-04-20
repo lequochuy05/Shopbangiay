@@ -5,8 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/padding"
     tools:context=".activity.CartActivity">
-
 
     <TextView
         android:id="@+id/tvEmptyCart"
@@ -22,16 +22,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <ScrollView
         android:id="@+id/scrollView3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="30dp"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp"
-        tools:ignore="MissingConstraints">
-
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,7 +35,7 @@
                 android:id="@+id/titleCart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="48dp">
+                android:paddingTop="32dp">
 
                 <TextView
                     android:id="@+id/textView4"
@@ -60,7 +54,6 @@
                     android:id="@+id/backBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/back" />
@@ -69,46 +62,46 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/cartView"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:layout_margin="@dimen/margin" />
+                android:layout_height="@dimen/cart_recycler_height"
+                android:layout_marginTop="@dimen/margin_top" />
 
             <LinearLayout
                 android:id="@+id/salesLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/marginHorizontal"
+                android:layout_marginTop="@dimen/margin_top"
+                android:paddingHorizontal="@dimen/paddingHorizontal"
                 android:background="@drawable/grey_bg_full_corner"
+                android:elevation="2dp"
                 android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/editTextText2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.7"
                     android:ems="10"
                     android:hint="Mã giảm giá"
                     android:inputType="text"
-                    android:paddingHorizontal="8dp"
-                    android:textSize="@dimen/text_size_small" />
+                    android:paddingHorizontal="@dimen/paddingHorizontal"/>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button"
                     style="@android:style/Widget.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.3"
                     android:background="@drawable/orange_bg"
                     android:text="Xác nhận"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/text_size_small" />
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/priceLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin">
+                android:layout_marginTop="@dimen/margin_top">
 
 
                 <TextView
@@ -116,8 +109,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tổng tiền sản phẩm"
-                    android:textSize="@dimen/text_size_small"
                     android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -128,8 +121,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top"
                     android:text="Phí vận chuyển"
-                    android:textSize="@dimen/text_size_small"
                     android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView12" />
@@ -140,8 +133,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top"
                     android:text="Phí VAT"
-                    android:textSize="@dimen/text_size_small"
                     android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView13" />
@@ -152,8 +145,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top"
                     android:text="Giảm giá"
-                    android:textSize="@dimen/text_size_small"
                     android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView14" />
@@ -162,12 +155,12 @@
                     android:id="@+id/view"
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="24dp"
                     android:background="@drawable/orange_bg"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView14" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
                 <TextView
                     android:id="@+id/totalFeeTxt"
@@ -175,7 +168,8 @@
                     android:layout_height="wrap_content"
                     android:text="0 VND"
                     android:textColor="@color/black"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:ignore="MissingConstraints" />
 
                 <TextView
                     android:id="@+id/deliveryTxt"
@@ -213,6 +207,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top"
                     android:text="Tổng"
+                    android:textSize="@dimen/text_size_small"
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     app:layout_constraintTop_toBottomOf="@+id/view" />
@@ -223,7 +218,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top"
                     android:text="0 VND"
-                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_small"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -237,9 +233,7 @@
                 android:background="@drawable/orange_bg"
                 android:text="Thanh toán"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_size_medium"
-
-                />
+                android:textSize="@dimen/text_size_medium" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

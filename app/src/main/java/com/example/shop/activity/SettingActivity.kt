@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import androidx.core.content.edit
 
 class SettingActivity : BaseActivity() {
 
@@ -87,6 +88,19 @@ class SettingActivity : BaseActivity() {
                 startActivity(intent)
             }
         }
+
+        settingViewModel.navigateToHelpCenter.observe(this) { shouldNavigate ->
+            if (shouldNavigate) {
+                val intent = Intent(this, HelpCenterActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        settingViewModel.navigateToChat.observe(this) { shouldNavigate ->
+            if (shouldNavigate) {
+                val intent = Intent(this, ChatBotActivity::class.java)
+                startActivity(intent)
+            }
+        }
     }
     private fun loadUserInfo() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -122,7 +136,7 @@ class SettingActivity : BaseActivity() {
         val loginRepository = LoginRepository()
         loginRepository.getCurrentUser()?.let { FirebaseAuth.getInstance().signOut() }
         val sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
-        sharedPreferences.edit().clear().apply()
+        sharedPreferences.edit() { clear() }
         startActivity(Intent(this, IntroActivity::class.java))
     }
 }

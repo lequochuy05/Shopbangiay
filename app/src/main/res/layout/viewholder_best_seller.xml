@@ -21,7 +21,7 @@
 
     <ImageView
         android:id="@+id/pic"
-        android:layout_width="164dp"
+        android:layout_width="@dimen/item_pic_width"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_end"
         android:scaleType="centerInside"

@@ -47,7 +47,7 @@ class ManagementCart(private val context: Context, private val userId: String) {
     /**
      * Cập nhật danh sách giỏ hàng vào SharedPreferences
      */
-    fun updateCartStorage(list: ArrayList<ItemsModel>) {
+    private fun updateCartStorage(list: ArrayList<ItemsModel>) {
         tinyDB.putListObject(getCartKey(), list)
     }
 

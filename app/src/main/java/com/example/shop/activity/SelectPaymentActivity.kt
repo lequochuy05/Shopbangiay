@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.shop.databinding.ActivitySelectPaymentBinding
 import com.example.shop.repository.SelectPaymentRepository
 import com.example.shop.viewModel.SelectPaymentViewModel
+import androidx.core.view.isGone
 
 class SelectPaymentActivity : BaseActivity() {
     private lateinit var binding: ActivitySelectPaymentBinding
@@ -40,10 +41,9 @@ class SelectPaymentActivity : BaseActivity() {
 
         binding.cancelBtn.setOnClickListener { finish() }
         binding.nextBtn.setOnClickListener { processPayment() }
-        binding.imageViewArrow.setOnClickListener { binding.spinnerAddress.performClick() }
 
         binding.btnAddAddress.setOnClickListener {
-            if (binding.etInputNewAddress.visibility == View.GONE) {
+            if (binding.etInputNewAddress.isGone) {
                 binding.layoutSpinner.visibility = View.GONE
                 binding.etInputNewAddress.visibility = View.VISIBLE
                 binding.btnAddAddress.text = "Lưu Địa Chỉ"

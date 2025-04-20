@@ -21,10 +21,6 @@ import com.example.shop.helper.ManagementCart
 import com.example.shop.model.OrderItemModel
 import com.example.shop.model.OrderModel
 import com.google.firebase.database.FirebaseDatabase
-import java.security.SecureRandom
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class PaymentDetailActivity : BaseActivity() {
     private lateinit var binding: ActivityPaymentDetailBinding
@@ -41,10 +37,10 @@ class PaymentDetailActivity : BaseActivity() {
             "ZaloPay" -> {
                 startZaloPayPayment(totalAmount)
             }
-            "VnPay" -> {
-                binding.paymentTitle.text = "Thanh toán qua VnPay"
-                binding.paymentDesc.text = "Bạn sẽ được chuyển đến cổng thanh toán VnPay để tiếp tục."
-            }
+//            "VnPay" -> {
+//                binding.paymentTitle.text = "Thanh toán qua VnPay"
+//                binding.paymentDesc.text = "Bạn sẽ được chuyển đến cổng thanh toán VnPay để tiếp tục."
+//            }
             "COD" -> {
                 binding.paymentTitle.text = "Thanh toán khi nhận hàng"
                 binding.paymentDesc.text = "Bạn sẽ thanh toán khi nhận hàng từ đơn vị vận chuyển."
@@ -122,7 +118,7 @@ class PaymentDetailActivity : BaseActivity() {
         dialog.show()
     }
 
-    fun goToOrderTrackingPage() {
+    private fun goToOrderTrackingPage() {
         val intent = Intent(this, OrderTrackingActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
@@ -144,7 +140,7 @@ class PaymentDetailActivity : BaseActivity() {
         dialog.show()
     }
 
-    fun goToCartPage() {
+    private fun goToCartPage() {
         val intent = Intent(this, CartActivity::class.java)
         startActivity(intent)
         finish()
@@ -154,7 +150,7 @@ class PaymentDetailActivity : BaseActivity() {
         val ordersRef = firebaseDatabase.getReference("orders")
         val sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
 
-        val uId = sharedPreferences.getString("uId", "Unknown").toString()
+        val uId = sharedPreferences.getString("uId", "Khách").toString()
         val deliveryAddress = intent.getStringExtra("selectedAddress") ?: "Chưa có địa chỉ"
         val totalAmount = intent.getIntExtra("totalAmount", 0).toDouble()
 
@@ -182,7 +178,7 @@ class PaymentDetailActivity : BaseActivity() {
     }
     private fun getCartItems(): List<OrderItemModel> {
         val sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
-        val uId = sharedPreferences.getString("uId", "Unknown").toString() // Lấy userId từ SharedPreferences
+        val uId = sharedPreferences.getString("uId", "Khách").toString() // Lấy userId từ SharedPreferences
 
         val managementCart = ManagementCart(this, uId) // Truyền userId vào
         val randomString = generateRandomString(12)
@@ -201,7 +197,7 @@ class PaymentDetailActivity : BaseActivity() {
 
     private fun clearCart() {
         val sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
-        val uId = sharedPreferences.getString("uId", "Unknown").toString()
+        val uId = sharedPreferences.getString("uId", "Khách").toString()
         val managementCart = ManagementCart(this, uId)
         managementCart.clearCart()
     }

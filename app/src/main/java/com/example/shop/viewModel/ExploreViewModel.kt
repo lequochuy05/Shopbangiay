@@ -9,7 +9,7 @@ import com.example.shop.repository.ExploreRepository
 class ExploreViewModel : ViewModel() {
 
     private val repository = ExploreRepository()
-    val itemsList: LiveData<List<ItemsModel>> = repository.itemsList
+    private val itemsList: LiveData<List<ItemsModel>> = repository.itemsList
 
     private val _filteredList = MutableLiveData<List<ItemsModel>>()
     val filteredList: LiveData<List<ItemsModel>> get() = _filteredList

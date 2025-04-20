@@ -13,8 +13,6 @@ class SettingRepository(context: Context) {
     fun getSettings(): List<SettingModel> {
         return listOf(
             SettingModel(R.drawable.search_icon, "Theo dõi đơn hàng"),
-            SettingModel(R.drawable.ic_address, "Địa chỉ và thanh toán"),
-            SettingModel(R.drawable.ic_list, "Lịch sử mua hàng"),
             SettingModel(R.drawable.ic_help, "Trung tâm trợ giúp"),
             SettingModel(R.drawable.ic_live_chat, "Hỗ trợ trực tuyến"),
             SettingModel(R.drawable.ic_warning, "Báo lỗi và góp ý"),

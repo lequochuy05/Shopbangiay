@@ -47,25 +47,25 @@ class DashboardRepository {
      */
     fun loadBestSeller(): LiveData<MutableList<ItemsModel>> {
         val bestSellerLiveData = MutableLiveData<MutableList<ItemsModel>>()
-        val ref = firebaseDatabase.getReference("BestSeller")
+        val ref = FirebaseDatabase.getInstance().getReference("Items")
 
-        ref.addValueEventListener(object : ValueEventListener {
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val lists = mutableListOf<ItemsModel>()
+                val bestSellers = mutableListOf<ItemsModel>()
                 for (childSnapshot in snapshot.children) {
                     val item = childSnapshot.getValue(ItemsModel::class.java)
-                    if (item != null) {
-                        lists.add(item)
+                    if (item != null && item.bestSeller) {
+                        bestSellers.add(item)
                     }
                 }
-                bestSellerLiveData.value = lists
-//                Log.d("Firebase", "Load Best Seller Success")
+                bestSellerLiveData.value = bestSellers
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.e("FirebaseError", "Load Best Seller Failed: ${error.message}")
             }
         })
+
         return bestSellerLiveData
     }
 

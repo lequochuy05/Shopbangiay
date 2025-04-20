@@ -5,7 +5,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
+    android:padding="@dimen/padding"
     android:gravity="center_vertical">
 
     <ImageView
@@ -13,6 +13,7 @@
         android:layout_width="@dimen/width_logo"
         android:layout_height="@dimen/height_logo"
         android:scaleType="centerCrop"
+        android:src="@drawable/ic_address"
         android:background="@drawable/white_bg_oval"
         android:layout_marginEnd="@dimen/margin_end" />
 

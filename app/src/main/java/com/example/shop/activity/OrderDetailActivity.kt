@@ -1,5 +1,6 @@
 package com.example.shop.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +36,7 @@ class OrderDetailActivity : BaseActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun displayOrderDetails(order: OrderModel) {
         try {
             binding.tvOrderId.text = "Mã đơn: ${order.orderId}"

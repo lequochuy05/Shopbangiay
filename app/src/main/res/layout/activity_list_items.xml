@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.ListItemsActivity"
-    android:background="#9E9E9E"
+    android:padding="@dimen/padding"
     >
 
     <ScrollView
@@ -23,7 +23,7 @@
                 android:id="@+id/titleCart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="48dp">
+                android:paddingTop="32dp">
 
                 <TextView
                     android:id="@+id/categoryTxt"
@@ -42,7 +42,6 @@
                     android:id="@+id/backBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/back" />
